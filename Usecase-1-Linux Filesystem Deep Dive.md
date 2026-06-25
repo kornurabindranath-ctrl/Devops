@@ -395,4 +395,3 @@ namei -l /path/to/file  # Permission check on every path segment
 
 ---
 
-*Day 01/365 — linux-mastery*
