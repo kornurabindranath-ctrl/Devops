@@ -1,0 +1,21 @@
+#stage 1 - Build
+FROM golang:1.26 AS builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN go build -o server .
+
+#stage 2 - Runtime
+FROM alpine:latest
+
+WORKDIR /app
+
+COPY --from=builder /app/server .
+
+EXPOSE 8080
+
+CMD ["./server"]
+
+

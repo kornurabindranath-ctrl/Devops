@@ -1,0 +1,32 @@
+# Builder Stage
+FROM golang:1.26 AS builder
+
+WORKDIR /app
+
+# Copy dependency files first
+COPY go.mod .
+COPY go.sum .
+
+# Download dependencies
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build binary
+RUN CGO_ENABLED=0 GOOS=linux go build -o server .
+
+# Runtime Stage
+FROM gcr.io/distroless/static-debian12
+
+WORKDIR /
+
+# Copy only the binary
+COPY --from=builder /app/server /server
+
+# Run as non-root
+USER nonroot:nonroot
+
+EXPOSE 8080
+
+ENTRYPOINT ["/server"]
