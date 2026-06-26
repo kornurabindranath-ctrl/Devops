@@ -50,23 +50,6 @@ This repository documents the **evolution** of a Docker image for a Go applicati
 
 Get the application running inside a container. Nothing more.
 
-┌──────────────────────────────┐
-│ Debian                       │
-├──────────────────────────────┤
-│ Linux Packages               │
-├──────────────────────────────┤
-│ Go SDK                       │
-├──────────────────────────────┤
-│ Go Compiler                  │
-├──────────────────────────────┤
-│ Build Cache                  │
-├──────────────────────────────┤
-│ Source Code                  │
-├──────────────────────────────┤
-│ Binary                        │
-└──────────────────────────────┘
-
-≈ 1.41 GB
 
 ### Dockerfile
 
@@ -121,13 +104,6 @@ A production container only needs the compiled binary. The compiler, the source 
 
 The fix: separate the build environment from the runtime environment.
 
-┌──────────────────────────────┐
-│ Alpine Linux                 │
-├──────────────────────────────┤
-│ Binary                       │
-└──────────────────────────────┘
-
-≈ 25.7 MB
 
 ---
 
