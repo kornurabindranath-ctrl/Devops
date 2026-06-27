@@ -1,4 +1,4 @@
-# 🔒 Use Case 3 – Trivy CI Integration
+Day 3 – Trivy CI Integration
 
 > Container vulnerability scanning integrated with GitHub Actions — a production-grade DevSecOps pipeline with security gates, CVE detection, and container hardening.
 
@@ -174,16 +174,31 @@ trivy image \
 
 ### 2.3 Additional Scan Types
 
-```bash
+``
 # Filesystem scan
 trivy fs .
+
+Found vulnerabities in falsk version 2.2.2, need to upgrade version of flask.
+
+<img width="2938" height="1534" alt="image" src="https://github.com/user-attachments/assets/b960ee7d-74d2-4097-b3c3-e1f89460b660" />
+
 
 # Secret detection
 trivy fs --scanners secret .
 
+We can observe that the access keys are hardcoded in the source code, which is a serious security risk and should be avoided in production environments.
+
+<img width="2404" height="1682" alt="image" src="https://github.com/user-attachments/assets/b093ef16-e77c-4edf-ab51-fdbc9e93fcc3" />
+
+
 # Misconfiguration scan
 trivy config .
-```
+
+Running a container with privileged access poses security risks. It is recommended to use a dedicated non-root user to minimize the attack surface and adhere to the principle of least privilege.
+
+<img width="2924" height="1546" alt="image" src="https://github.com/user-attachments/assets/f3e09f87-140d-4cc9-a15a-ba1f8b726a73" />
+
+``
 
 ### Screenshots
 
@@ -245,8 +260,9 @@ Create a `.trivyignore` file at the repo root with known false positives:
 
 ```
 # .trivyignore
-CVE-2024-12345
-CVE-2024-98765
+CVE-2023-30861
+CVE-2026-42497
+CVE-2026-42497
 ```
 
 Trivy will skip these CVEs during all scans automatically.
