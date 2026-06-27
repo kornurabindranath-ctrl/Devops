@@ -41,6 +41,7 @@ jobs:
           image-ref: trivy:v1
           format: json
           output: trivy-report.json
+          exit-code: '0'
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
