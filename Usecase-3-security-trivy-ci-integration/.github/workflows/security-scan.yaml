@@ -1,0 +1,50 @@
+name: Trivy Security Scan
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  security_scan:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      - name: Build Docker Image
+        run: |
+          docker build -t trivy:v1 ./Usecase-3-security-trivy-ci-integration/app
+
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@v0.35.0
+
+        with:
+          image-ref: trivy:v1
+          format: table
+          severity: HIGH,CRITICAL
+          ignore-unfixed: true
+          exit-code: '1'
+
+      - name: JSON Report
+        uses: aquasecurity/trivy-action@v0.35.0
+
+        with:
+          image-ref: trivy:v1
+          format: json
+          output: trivy-report.json
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+
+        with:
+          name: trivy-report
+          path: trivy-report.json
