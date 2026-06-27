@@ -22,7 +22,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t trivy:v1 ./app
+          docker build -t trivy:v1 ./Usecase-3-security-trivy-ci-integration/app
 
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@v0.35.0
