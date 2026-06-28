@@ -1,0 +1,112 @@
+services:
+
+  api:
+
+    build: ./api
+
+    ports:
+      - "8080:5000"
+
+    depends_on:
+
+      db:
+        condition: service_healthy
+
+      cache:
+        condition: service_healthy
+
+      queue:
+        condition: service_healthy
+
+    profiles:
+      - app
+
+    restart: always
+
+  db:
+
+    image: postgres:17
+
+    environment:
+
+      POSTGRES_USER: ${POSTGRES_USER}
+
+      POSTGRES_DB: ${POSTGRES_DB}
+
+      POSTGRES_PASSWORD_FILE:
+        /run/secrets/db_password
+
+    secrets:
+      - db_password
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U devuser -d appdb"
+        ]
+
+      interval: 10s
+
+      retries: 5
+
+      timeout: 5s
+
+  cache:
+
+    image: redis:8-alpine
+
+    healthcheck:
+
+      test:
+        ["CMD","redis-cli","ping"]
+
+      interval: 10s
+
+      retries: 5
+
+  queue:
+
+    image: rabbitmq:4-management
+
+    ports:
+
+      - "15672:15672"
+
+    healthcheck:
+
+      test:
+        [
+          "CMD",
+          "rabbitmq-diagnostics",
+          "ping"
+        ]
+
+      interval: 10s
+
+      retries: 5
+
+  worker:
+
+    build: ./worker
+
+    depends_on:
+
+      cache:
+        condition: service_healthy
+
+    restart: always
+
+secrets:
+
+  db_password:
+
+    file: ./secrets/db_password.txt
+
+volumes:
+
+  postgres_data:
