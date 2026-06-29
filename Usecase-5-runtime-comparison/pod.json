@@ -1,0 +1,9 @@
+{
+  "metadata": {
+    "name": "testpod",
+    "namespace": "default",
+    "attempt": 1,
+    "uid": "testpod"
+  },
+  "linux": {}
+}
