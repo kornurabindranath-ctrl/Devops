@@ -1,0 +1,13 @@
+#include <tunables/global>
+
+profile docker-secure flags=(attach_disconnected) {
+
+  network,
+
+  capability,
+
+  file,
+
+  deny /tmp/secret.txt r,
+
+}
