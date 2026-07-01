@@ -330,6 +330,147 @@ Now scaling automatically triggers because deployment containers already have me
 
 
 
+# Phase  5 VPA
+
+Clone autoscaler repo
+
+bash
+```
+git clone https://github.com/kubernetes/autoscaler.git
+```
+bash
+```
+Move to cd autoscaler/vertical-pod-autoscaler
+```
+
+Install VPA
+bash
+```
+./hack/vpa-up.sh
+```
+
+<img width="2572" height="970" alt="image" src="https://github.com/user-attachments/assets/e6e53084-610f-47a2-b1f0-1f523ba4d70f" />
+
+Verify VPA setup
+
+<img width="2940" height="322" alt="image" src="https://github.com/user-attachments/assets/92cc69db-5181-4886-bd21-4f24cfadc369" />
+
+create a deployment
+bash
+```
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: vpa-demo
+  namespace: autoscaling
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: vpa-demo
+
+  template:
+
+    metadata:
+      labels:
+        app: vpa-demo
+
+    spec:
+
+      containers:
+
+      - name: stress
+
+        image: polinux/stress
+
+        command:
+
+        - stress
+
+        args:
+
+        - "--vm"
+
+        - "1"
+
+        - "--vm-bytes"
+
+        - "200M"
+
+        - "--vm-hang"
+
+        - "1"
+
+        resources:
+
+          requests:
+
+            cpu: 100m
+
+            memory: 100Mi
+
+          limits:
+
+            cpu: 500m
+
+            memory: 500Mi
+```
+
+create VPA
+
+bash
+```
+apiVersion: autoscaling.k8s.io/v1
+
+kind: VerticalPodAutoscaler
+
+metadata:
+  name: vpa-demo
+
+  namespace: autoscaling
+
+spec:
+
+  targetRef:
+
+    apiVersion: apps/v1
+
+    kind: Deployment
+
+    name: vpa-demo
+
+  updatePolicy:
+
+    updateMode: Auto
+```
+
+deploy them
+
+bash 
+```
+kubectl apply -f deployment.yaml
+
+kubectl apply -f vpa.yaml
+```
+then verify VPA
+
+<img width="2474" height="190" alt="image" src="https://github.com/user-attachments/assets/f5782884-2935-45f3-b583-d7a4d38f8366" />
+
+VPA recommendations
+
+<img width="1796" height="1390" alt="image" src="https://github.com/user-attachments/assets/ef2e5bad-d8b0-4b39-adda-074068bd850e" />
+
+check current one replica and their resource requests will adjusted by VPA
+
+
+
+
+
+
+
 
 
     
