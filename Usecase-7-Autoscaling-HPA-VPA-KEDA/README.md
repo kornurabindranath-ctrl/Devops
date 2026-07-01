@@ -18,6 +18,11 @@ flowchart TB
     end
 ```
 
+# project structure 
+
+<img width="2520" height="904" alt="image" src="https://github.com/user-attachments/assets/fd0e2a6e-8bd5-4158-8d88-c8bf8795cdb5" />
+
+
 ## Phase 0 setup kubectl,eksctl,awscli,aws configure
 
 ## Phase 1 - Creating a EKS Cluster
