@@ -1,0 +1,10 @@
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+
+metadata:
+  name: aws-trigger-auth
+  namespace: autoscaling
+
+spec:
+  podIdentity:
+    provider: aws

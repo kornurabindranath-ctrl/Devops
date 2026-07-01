@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: worker
+  namespace: autoscaling
+
+spec:
+  replicas: 0
+
+  selector:
+    matchLabels:
+      app: worker
+
+  template:
+
+    metadata:
+      labels:
+        app: worker
+
+    spec:
+
+      containers:
+
+      - name: worker
+
+        image: busybox
+
+        command:
+        - sh
+        - -c
+
+        args:
+        - |
+          while true
+          do
+            echo "processing"
+            sleep 30
+          done
