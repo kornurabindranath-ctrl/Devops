@@ -1,0 +1,24 @@
+apiVersion: karpenter.k8s.aws/v1
+kind: EC2NodeClass
+
+metadata:
+  name: default
+
+spec:
+  amiFamily: AL2023
+
+  amiSelectorTerms:
+    - alias: al2023@latest
+
+  role: KarpenterNodeRole-autoscaling-lab
+
+  subnetSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: autoscaling-lab
+
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: autoscaling-lab
+
+  tags:
+    karpenter.sh/discovery: autoscaling-lab
