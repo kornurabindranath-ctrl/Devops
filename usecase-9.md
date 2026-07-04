@@ -293,11 +293,16 @@ backend-v1-5678647859-7vblk \
 
  <img width="2940" height="618" alt="image" src="https://github.com/user-attachments/assets/6d96ba53-447f-4557-850a-6c87cccfe16f" />
 
-it confirms that:
+### Route Verification
 
-backend → the service is known to Envoy.
-backend|80|v1 → Envoy has a route to version v1.
-backend|80|v2 → Envoy has a route to version v2.
+The following entries confirm that Istio traffic routing is configured correctly:
+
+* **backend** → The service is recognized by Envoy and is part of the service mesh.
+* **backend|80|v1** → Envoy has a route configured to send traffic to **Backend Version v1**.
+* **backend|80|v2** → Envoy has a route configured to send traffic to **Backend Version v2**.
+
+This verifies that the `VirtualService` and `DestinationRule` configurations have been successfully propagated to the Envoy sidecars, enabling Istio traffic management capabilities such as traffic splitting, canary deployments, retries, and fault injection.
+
 
 Testing traffic spliting
 
@@ -349,6 +354,9 @@ verify for one pod
 
 adding Retry polices in virtual service
 
+### Retry Policy Workflow
+
+```text
 Frontend
    │
    ▼
@@ -359,8 +367,10 @@ Istio retries
 2nd request → succeeds
 
 Client sees success
+```
 
-This improves resiliency against transient failures.
+This behavior demonstrates Istio's retry capability, where transient failures are automatically handled by the service mesh without requiring application-level changes. Retry policies improve application resiliency by transparently reissuing failed requests, increasing service availability and reducing the impact of intermittent network issues or temporary backend failures.
+
 
 bash
 ```
@@ -400,8 +410,11 @@ deploy and verify the configuration
 
 # Phase 6 Circuit breaker
 
-Without a circuit breaker:
+### Circuit Breaker Workflow
 
+#### Without a Circuit Breaker
+
+```text
 Frontend
    │
    ▼
@@ -409,25 +422,32 @@ Backend (slow/failing)
 
 1000 requests
 1000 failures
+```
 
-With a circuit breaker:
+#### With a Circuit Breaker
 
+```text
 Frontend
    │
    ▼
 Istio Proxy
    │
-   ├── Healthy → Forward request
+   ├── Healthy   → Forward request
    └── Unhealthy → Stop sending traffic
-
+   │
+   ▼
 Backend
+```
 
-Istio can:
+Istio Circuit Breakers provide resiliency by:
 
-limit connections
-limit pending requests
-eject unhealthy endpoints
-prevent cascading failures
+* Limiting the number of active connections
+* Restricting pending requests
+* Ejecting unhealthy endpoints from the load-balancing pool
+* Preventing cascading failures across microservices
+* Protecting downstream services from overload conditions
+* Improving overall application stability and availability
+
 
 Modify destinationRule config by adding traffic policy
 
@@ -508,11 +528,13 @@ http://backend
 
 <img width="2940" height="1398" alt="image" src="https://github.com/user-attachments/assets/c1d464ed-8a1c-4367-a31c-85f05a3802cf" />
 
+### Circuit Breaker Validation with Fortio
+
+```text
 Fortio
    │
    │ 50 concurrent requests
    ▼
-
 Envoy Sidecar
 
 maxConnections = 1
@@ -526,13 +548,19 @@ Pending requests overflow
 Envoy returns 503
 
 Backend protected
+```
 
-This is the exact purpose of a circuit breaker:
+This demonstrates the primary objective of a circuit breaker within a service mesh.
 
-prevent overload
-avoid cascading failures
-eject unhealthy endpoints
-maintain service stability
+**Benefits of Circuit Breaking:**
+
+* Prevents service overload
+* Avoids cascading failures across dependent services
+* Ejects unhealthy endpoints from the load-balancing pool
+* Maintains overall service stability
+* Protects backend workloads during traffic spikes
+* Improves application resiliency under failure conditions
+
 
 
 # Phase 7 Fault injection
