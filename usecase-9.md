@@ -535,6 +535,56 @@ eject unhealthy endpoints
 maintain service stability
 
 
+# Phase 7 Fault injection
+
+Fault injection allows us to simulate:
+
+Latency spikes
+Backend slowness
+Service failures
+Chaos engineering scenarios
+
+
+Delay Injection
+
+bash
+```
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: backend
+  namespace: production
+
+spec:
+  hosts:
+  - backend
+
+  http:
+  - fault:
+      delay:
+        percentage:
+          value: 100
+        fixedDelay: 5s
+
+    route:
+    - destination:
+        host: backend
+        subset: v1
+      weight: 90
+
+    - destination:
+        host: backend
+        subset: v2
+      weight: 10
+```
+
+deploy and verfiy fault injection
+
+<img width="2876" height="566" alt="image" src="https://github.com/user-attachments/assets/a9101be0-389a-4a71-a66f-a57cb027542a" />
+
+simulating 5 sec delay
+
+
 
 
 
