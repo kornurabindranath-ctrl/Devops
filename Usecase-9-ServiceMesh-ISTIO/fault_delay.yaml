@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+
+metadata:
+  name: backend-delay
+  namespace: production
+
+spec:
+  hosts:
+  - backend
+
+  http:
+
+  - fault:
+
+      delay:
+
+        percentage:
+          value: 100
+
+        fixedDelay: 5s
+
+    route:
+
+    - destination:
+        host: backend

@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+
+metadata:
+  name: backend-abort
+  namespace: production
+
+spec:
+  hosts:
+  - backend
+
+  http:
+
+  - fault:
+
+      abort:
+
+        percentage:
+          value: 50
+
+        httpStatus: 503
+
+    route:
+
+    - destination:
+        host: backend
