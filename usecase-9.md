@@ -584,7 +584,85 @@ deploy and verfiy fault injection
 
 simulating 5 sec delay
 
+Abort Fault Injection
 
+Instead of delay:
+
+fault:
+  abort:
+    percentage:
+      value: 50
+    httpStatus: 503
+
+
+# Phase 9 Kiali 
+
+Move to ISTIO installation directory
+
+bash
+```
+cd istio-1.30.2
+```
+
+Install addons
+
+bash
+```
+kubectl apply -f samples/addons
+```
+<img width="2934" height="1738" alt="image" src="https://github.com/user-attachments/assets/4ff48a72-549d-4e03-97f5-750c1823409b" />
+
+verify the setup
+
+<img width="2680" height="602" alt="image" src="https://github.com/user-attachments/assets/a911822b-70fa-4ca3-9640-29ff1029617f" />
+
+verify the services
+
+<img width="2900" height="1590" alt="image" src="https://github.com/user-attachments/assets/17e0efc7-a978-4414-9722-035159813e4e" />
+
+check kial setup
+
+bash
+```
+istioctl dashboard kiali
+```
+It should automatically open:
+
+http://localhost:20001
+
+<img width="2932" height="1698" alt="image" src="https://github.com/user-attachments/assets/14add9fb-560f-4cbe-a472-5896cf219c3f" />
+
+
+Generate traffic
+
+bash
+```
+kubectl exec \
+-n production \
+deploy/fortio-deploy \
+-c fortio \
+-- fortio load \
+-c 20 \
+-qps 0 \
+-t 60s \
+http://backend
+```
+check graph and enable namespace as production and observe the requests
+
+<img width="2910" height="1592" alt="image" src="https://github.com/user-attachments/assets/a11dcf40-ee19-429a-b244-611a0c1ea875" />
+
+  mTLS 
+
+  <img width="2668" height="1358" alt="image" src="https://github.com/user-attachments/assets/4da75882-d321-437f-8cb7-2767807c71c0" />
+
+more details to check for kiali
+
+<img width="2890" height="1096" alt="image" src="https://github.com/user-attachments/assets/48a423f1-06ec-4c10-9a4f-d439dcd240d8" />
+
+
+
+
+    
 
 
 
