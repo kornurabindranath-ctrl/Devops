@@ -1,5 +1,29 @@
-# Day 10 - Service mesh with Istio
-mTLS between services, traffic shifting, circuit breakers, fault injection testing, retry policies.
+# Day 10 -  🕸️ Istio Production Service Mesh
+
+A production-grade **Service Mesh** implementation using **Istio** on Kubernetes — demonstrating advanced traffic management, zero-trust security, resiliency patterns, and full-stack observability
+
+
+## 📌 Project Overview
+
+This project showcases core Istio capabilities in a realistic production topology:
+
+- 🔐 Service-to-Service mTLS (Zero Trust)
+- 🔀 Traffic Splitting / Canary Deployments
+- 🔁 Retry Policies
+- ⛔ Circuit Breakers
+- 💥 Fault Injection (Chaos Engineering)
+- 📊 Service Mesh Observability
+- ⚙️ Envoy Proxy Configuration & Debugging
+- 🕸️ Kiali Visualization
+
+- ## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+    A["Frontend<br/>(Envoy Sidecar)"] --> B["Istio Service Mesh<br/>VirtualService · DestinationRule · PeerAuthentication"]
+    B -->|90% Traffic| C["Backend v1<br/>(Envoy Sidecar)"]
+    B -->|10% Traffic| D["Backend v2<br/>(Envoy Sidecar)"]
+```
 
 # Phase 1 Create a Cluster
 
@@ -356,6 +380,18 @@ adding Retry polices in virtual service
 
 ### Retry Policy Workflow
 
+```mermaid
+sequenceDiagram
+    participant F as Frontend
+    participant B as Backend v1
+    F->>B: Request #1
+    B-->>F: 503 (fails)
+    Note over F,B: Istio retries automatically
+    F->>B: Request #2
+    B-->>F: 200 OK
+    Note over F: Client sees success
+```
+
 ```text
 Frontend
    │
@@ -411,6 +447,15 @@ deploy and verify the configuration
 # Phase 6 Circuit breaker
 
 ### Circuit Breaker Workflow
+
+```mermaid
+flowchart LR
+    A[Frontend] --> B[Istio Proxy]
+    B -->|Healthy| C[Forward Request]
+    B -->|Unhealthy| D[Stop Sending Traffic]
+    C --> E[Backend]
+```
+
 
 #### Without a Circuit Breaker
 
@@ -528,14 +573,15 @@ http://backend
 
 <img width="2940" height="1398" alt="image" src="https://github.com/user-attachments/assets/c1d464ed-8a1c-4367-a31c-85f05a3802cf" />
 
-### Circuit Breaker Validation with Fortio
+```mermaid
+flowchart TD
+    A["Fortio: 50 concurrent requests"] --> B["Envoy Sidecar<br/>maxConnections = 1"]
+    B --> C["Only one connection allowed"]
+    C --> D["Queue fills / requests overflow"]
+    D --> E["Envoy returns 503"]
+    E --> F["Backend protected"]
+```
 
-```text
-Fortio
-   │
-   │ 50 concurrent requests
-   ▼
-Envoy Sidecar
 
 maxConnections = 1
 
@@ -548,7 +594,6 @@ Pending requests overflow
 Envoy returns 503
 
 Backend protected
-```
 
 This demonstrates the primary objective of a circuit breaker within a service mesh.
 
@@ -565,6 +610,17 @@ This demonstrates the primary objective of a circuit breaker within a service me
 
 # Phase 7 Fault injection
 
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant E as Envoy Sidecar
+    participant B as Backend
+    C->>E: Request
+    E->>E: Inject 5s delay
+    E->>B: Forward (delayed)
+    B-->>C: Response (after delay)
+    Note over C: Client timeout may occur
+```
 Fault injection allows us to simulate:
 
 Latency spikes
@@ -688,8 +744,32 @@ more details to check for kiali
 <img width="2890" height="1096" alt="image" src="https://github.com/user-attachments/assets/48a423f1-06ec-4c10-9a4f-d439dcd240d8" />
 
 
+## ⚙️ Envoy Verification
 
+```bash
+# Verify xDS synchronization
+istioctl proxy-status
+# Expected: CDS / LDS / EDS / RDS all synced
 
+# Inspect routes
+istioctl proxy-config routes POD -n production
+
+# Inspect clusters
+istioctl proxy-config clusters POD -n production
+
+# Inspect secrets
+istioctl proxy-config secret POD -n production
+```
+
+## 📈 Observed Results
+
+| Test | Result |
+|------|--------|
+| Traffic Splitting | v1 ≈ 90% / v2 ≈ 10% |
+| Retry Policies | Automatic retries on transient failures |
+| Circuit Breakers | HTTP 503 generated, overflow protection, endpoint ejection |
+| Fault Injection | Latency spikes, timeouts, controlled failures |
+| mTLS | STRICT mode enabled, encrypted, Zero Trust |
     
 
 
