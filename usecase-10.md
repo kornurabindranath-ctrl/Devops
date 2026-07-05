@@ -1,4 +1,4 @@
-# Day 11 OPA Gatekeeper Policy-as-Code on Amazon EKS
+# Day 11 - OPA Gatekeeper Policy-as-Code on Amazon EKS
 
 
 It provides admission control policies that enforce security, governance, and operational best practices before workloads are deployed into the cluster.
