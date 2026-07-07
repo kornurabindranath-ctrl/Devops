@@ -1,0 +1,24 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: scheduling-lab
+  region: us-east-1
+
+availabilityZones:
+- us-east-1a
+- us-east-1b
+- us-east-1c
+
+managedNodeGroups:
+
+- name: general
+
+  instanceType: t3.medium
+
+  desiredCapacity: 3
+
+  availabilityZones:
+   - us-east-1a
+   - us-east-1b
+   - us-east-1c
