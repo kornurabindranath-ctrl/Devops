@@ -1,0 +1,291 @@
+NAMESPACE      LAST SEEN   TYPE      REASON                    OBJECT                                 MESSAGE
+default        85m         Normal    Starting                  node/ip-192-168-17-4.ec2.internal      
+default        85m         Normal    Starting                  node/ip-192-168-48-229.ec2.internal    
+default        9m9s        Normal    Starting                  node/ip-192-168-5-209.ec2.internal     
+default        9m9s        Normal    Starting                  node/ip-192-168-57-200.ec2.internal    
+kube-system    86m         Warning   FailedScheduling          pod/coredns-5959c9b9c4-gs8xh           no nodes available to schedule pods
+kube-system    86m         Warning   FailedScheduling          pod/coredns-5959c9b9c4-nsjbd           no nodes available to schedule pods
+default        85m         Warning   InvalidDiskCapacity       node/ip-192-168-48-229.ec2.internal    invalid capacity 0 on image filesystem
+default        85m         Normal    NodeHasSufficientMemory   node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal status is now: NodeHasSufficientMemory
+default        85m         Normal    Starting                  node/ip-192-168-17-4.ec2.internal      Starting kubelet.
+default        85m         Warning   InvalidDiskCapacity       node/ip-192-168-17-4.ec2.internal      invalid capacity 0 on image filesystem
+default        85m         Normal    NodeHasSufficientMemory   node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal status is now: NodeHasSufficientMemory
+default        85m         Normal    NodeAllocatableEnforced   node/ip-192-168-17-4.ec2.internal      Updated Node Allocatable limit across pods
+default        85m         Normal    NodeAllocatableEnforced   node/ip-192-168-48-229.ec2.internal    Updated Node Allocatable limit across pods
+default        85m         Normal    NodeHasSufficientPID      node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal status is now: NodeHasSufficientPID
+default        85m         Normal    NodeHasNoDiskPressure     node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal status is now: NodeHasNoDiskPressure
+default        85m         Normal    NodeHasNoDiskPressure     node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal status is now: NodeHasNoDiskPressure
+default        85m         Normal    NodeHasSufficientPID      node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal status is now: NodeHasSufficientPID
+default        85m         Normal    Starting                  node/ip-192-168-48-229.ec2.internal    Starting kubelet.
+kube-system    85m         Normal    SuccessfulCreate          daemonset/kube-proxy                   Created pod: kube-proxy-4jfkp
+kube-system    85m         Normal    Scheduled                 pod/aws-node-rdgp7                     Successfully assigned kube-system/aws-node-rdgp7 to ip-192-168-17-4.ec2.internal
+kube-system    85m         Normal    SuccessfulCreate          daemonset/kube-proxy                   Created pod: kube-proxy-nsfxh
+kube-system    85m         Normal    SuccessfulCreate          daemonset/aws-node                     Created pod: aws-node-rdgp7
+kube-system    85m         Normal    SuccessfulCreate          daemonset/aws-node                     Created pod: aws-node-c979v
+kube-system    85m         Normal    Scheduled                 pod/kube-proxy-nsfxh                   Successfully assigned kube-system/kube-proxy-nsfxh to ip-192-168-17-4.ec2.internal
+kube-system    85m         Normal    Scheduled                 pod/kube-proxy-4jfkp                   Successfully assigned kube-system/kube-proxy-4jfkp to ip-192-168-48-229.ec2.internal
+kube-system    85m         Normal    Scheduled                 pod/aws-node-c979v                     Successfully assigned kube-system/aws-node-c979v to ip-192-168-48-229.ec2.internal
+kube-system    85m         Normal    Pulling                   pod/aws-node-rdgp7                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.21.2-eksbuild.2"
+default        85m         Normal    Synced                    node/ip-192-168-17-4.ec2.internal      Node synced successfully
+kube-system    85m         Normal    Pulling                   pod/kube-proxy-nsfxh                   Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.35.3-eksbuild.11"
+default        85m         Normal    Synced                    node/ip-192-168-48-229.ec2.internal    Node synced successfully
+kube-system    85m         Normal    Pulling                   pod/aws-node-c979v                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.21.2-eksbuild.2"
+kube-system    85m         Normal    Pulling                   pod/kube-proxy-4jfkp                   Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.35.3-eksbuild.11"
+default        85m         Normal    RegisteredNode            node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal event: Registered Node ip-192-168-17-4.ec2.internal in Controller
+default        85m         Normal    RegisteredNode            node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal event: Registered Node ip-192-168-48-229.ec2.internal in Controller
+kube-system    85m         Normal    Pulled                    pod/kube-proxy-nsfxh                   Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.35.3-eksbuild.11" in 3.077s (3.077s including waiting). Image size: 31812938 bytes.
+kube-system    85m         Normal    Created                   pod/kube-proxy-nsfxh                   Container created
+kube-system    85m         Normal    Started                   pod/kube-proxy-4jfkp                   Container started
+kube-system    85m         Normal    Pulled                    pod/kube-proxy-4jfkp                   Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.35.3-eksbuild.11" in 2.891s (2.891s including waiting). Image size: 31812938 bytes.
+kube-system    85m         Normal    Created                   pod/kube-proxy-4jfkp                   Container created
+kube-system    85m         Normal    Started                   pod/kube-proxy-nsfxh                   Container started
+kube-system    85m         Normal    Pulled                    pod/aws-node-c979v                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.21.2-eksbuild.2" in 3.71s (3.71s including waiting). Image size: 71910459 bytes.
+kube-system    85m         Normal    Started                   pod/aws-node-c979v                     Container started
+kube-system    85m         Normal    Pulled                    pod/aws-node-rdgp7                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.21.2-eksbuild.2" in 3.673s (3.673s including waiting). Image size: 71910459 bytes.
+kube-system    85m         Normal    Created                   pod/aws-node-rdgp7                     Container created
+kube-system    85m         Normal    Started                   pod/aws-node-rdgp7                     Container started
+kube-system    85m         Normal    Created                   pod/aws-node-c979v                     Container created
+kube-system    85m         Normal    Pulling                   pod/aws-node-c979v                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.21.2-eksbuild.2"
+kube-system    85m         Normal    Pulling                   pod/aws-node-rdgp7                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.21.2-eksbuild.2"
+kube-system    85m         Normal    Created                   pod/aws-node-rdgp7                     Container created
+kube-system    85m         Normal    Pulling                   pod/aws-node-rdgp7                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3"
+kube-system    85m         Normal    Started                   pod/aws-node-rdgp7                     Container started
+kube-system    85m         Normal    Pulled                    pod/aws-node-rdgp7                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.21.2-eksbuild.2" in 2.871s (2.871s including waiting). Image size: 54065082 bytes.
+kube-system    85m         Normal    Pulled                    pod/aws-node-c979v                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.21.2-eksbuild.2" in 4.408s (4.408s including waiting). Image size: 54065082 bytes.
+kube-system    85m         Normal    Created                   pod/aws-node-rdgp7                     Container created
+kube-system    85m         Normal    Created                   pod/aws-node-c979v                     Container created
+kube-system    85m         Normal    Started                   pod/aws-node-rdgp7                     Container started
+kube-system    85m         Normal    Started                   pod/aws-node-c979v                     Container started
+kube-system    85m         Normal    Pulled                    pod/aws-node-rdgp7                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3" in 1.582s (1.582s including waiting). Image size: 36453590 bytes.
+kube-system    85m         Normal    Pulling                   pod/aws-node-c979v                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3"
+kube-system    85m         Normal    Scheduled                 pod/coredns-5959c9b9c4-nsjbd           Successfully assigned kube-system/coredns-5959c9b9c4-nsjbd to ip-192-168-17-4.ec2.internal
+kube-system    85m         Normal    Pulling                   pod/coredns-5959c9b9c4-nsjbd           Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10"
+kube-system    85m         Normal    Scheduled                 pod/coredns-5959c9b9c4-gs8xh           Successfully assigned kube-system/coredns-5959c9b9c4-gs8xh to ip-192-168-17-4.ec2.internal
+default        85m         Normal    NodeReady                 node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal status is now: NodeReady
+kube-system    85m         Normal    Started                   pod/aws-node-c979v                     Container started
+kube-system    85m         Normal    Created                   pod/aws-node-c979v                     Container created
+kube-system    85m         Normal    Pulled                    pod/aws-node-c979v                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3" in 1.553s (1.553s including waiting). Image size: 36453590 bytes.
+kube-system    85m         Normal    Pulling                   pod/coredns-5959c9b9c4-gs8xh           Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10"
+default        85m         Normal    NodeReady                 node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal status is now: NodeReady
+kube-system    85m         Normal    Created                   pod/coredns-5959c9b9c4-nsjbd           Container created
+kube-system    85m         Normal    Pulled                    pod/coredns-5959c9b9c4-nsjbd           Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10" in 1.712s (1.712s including waiting). Image size: 26026481 bytes.
+kube-system    85m         Normal    Started                   pod/coredns-5959c9b9c4-nsjbd           Container started
+kube-system    85m         Normal    Started                   pod/coredns-5959c9b9c4-gs8xh           Container started
+kube-system    85m         Normal    Created                   pod/coredns-5959c9b9c4-gs8xh           Container created
+kube-system    85m         Normal    Pulled                    pod/coredns-5959c9b9c4-gs8xh           Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10" in 1.704s (1.704s including waiting). Image size: 26026481 bytes.
+kube-system    84m         Normal    Scheduled                 pod/metrics-server-7b78764d44-h2l6v    Successfully assigned kube-system/metrics-server-7b78764d44-h2l6v to ip-192-168-17-4.ec2.internal
+kube-system    84m         Normal    SuccessfulCreate          replicaset/metrics-server-7b78764d44   Created pod: metrics-server-7b78764d44-zjmbh
+kube-system    84m         Normal    SuccessfulCreate          replicaset/metrics-server-7b78764d44   Created pod: metrics-server-7b78764d44-h2l6v
+kube-system    84m         Normal    ScalingReplicaSet         deployment/metrics-server              Scaled up replica set metrics-server-7b78764d44 from 0 to 2
+kube-system    84m         Normal    Scheduled                 pod/metrics-server-7b78764d44-zjmbh    Successfully assigned kube-system/metrics-server-7b78764d44-zjmbh to ip-192-168-48-229.ec2.internal
+kube-system    84m         Normal    NoPods                    poddisruptionbudget/metrics-server     No matching pods found
+kube-system    84m         Normal    Pulling                   pod/metrics-server-7b78764d44-zjmbh    Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.1-eksbuild.11"
+kube-system    84m         Normal    Pulling                   pod/metrics-server-7b78764d44-h2l6v    Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.1-eksbuild.11"
+kube-system    84m         Normal    Started                   pod/metrics-server-7b78764d44-h2l6v    Container started
+kube-system    84m         Normal    Pulled                    pod/metrics-server-7b78764d44-h2l6v    Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.1-eksbuild.11" in 1.638s (1.638s including waiting). Image size: 22888993 bytes.
+kube-system    84m         Normal    Created                   pod/metrics-server-7b78764d44-h2l6v    Container created
+kube-system    84m         Normal    Pulled                    pod/metrics-server-7b78764d44-zjmbh    Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.1-eksbuild.11" in 1.753s (1.753s including waiting). Image size: 22888993 bytes.
+kube-system    84m         Normal    Created                   pod/metrics-server-7b78764d44-zjmbh    Container created
+kube-system    84m         Normal    Started                   pod/metrics-server-7b78764d44-zjmbh    Container started
+upgrade-demo   77m         Normal    SuccessfulCreate          replicaset/nginx-demo-787b5dd6c9       Created pod: nginx-demo-787b5dd6c9-mq8fm
+upgrade-demo   77m         Normal    SuccessfulCreate          replicaset/nginx-demo-787b5dd6c9       Created pod: nginx-demo-787b5dd6c9-fvsbn
+upgrade-demo   77m         Normal    Scheduled                 pod/nginx-demo-787b5dd6c9-fvsbn        Successfully assigned upgrade-demo/nginx-demo-787b5dd6c9-fvsbn to ip-192-168-48-229.ec2.internal
+upgrade-demo   77m         Normal    ScalingReplicaSet         deployment/nginx-demo                  Scaled up replica set nginx-demo-787b5dd6c9 from 0 to 3
+upgrade-demo   77m         Normal    Scheduled                 pod/nginx-demo-787b5dd6c9-rf2bl        Successfully assigned upgrade-demo/nginx-demo-787b5dd6c9-rf2bl to ip-192-168-48-229.ec2.internal
+upgrade-demo   77m         Normal    SuccessfulCreate          replicaset/nginx-demo-787b5dd6c9       Created pod: nginx-demo-787b5dd6c9-rf2bl
+upgrade-demo   77m         Normal    Scheduled                 pod/nginx-demo-787b5dd6c9-mq8fm        Successfully assigned upgrade-demo/nginx-demo-787b5dd6c9-mq8fm to ip-192-168-17-4.ec2.internal
+upgrade-demo   77m         Normal    Pulling                   pod/nginx-demo-787b5dd6c9-fvsbn        Pulling image "nginx:1.27"
+upgrade-demo   77m         Normal    Pulling                   pod/nginx-demo-787b5dd6c9-rf2bl        Pulling image "nginx:1.27"
+upgrade-demo   77m         Normal    Pulling                   pod/nginx-demo-787b5dd6c9-mq8fm        Pulling image "nginx:1.27"
+upgrade-demo   77m         Normal    Pulled                    pod/nginx-demo-787b5dd6c9-rf2bl        Successfully pulled image "nginx:1.27" in 3.17s (3.17s including waiting). Image size: 72406859 bytes.
+upgrade-demo   77m         Normal    Pulled                    pod/nginx-demo-787b5dd6c9-mq8fm        Successfully pulled image "nginx:1.27" in 3.264s (3.264s including waiting). Image size: 72406859 bytes.
+upgrade-demo   77m         Normal    Created                   pod/nginx-demo-787b5dd6c9-mq8fm        Container created
+upgrade-demo   77m         Normal    Started                   pod/nginx-demo-787b5dd6c9-mq8fm        Container started
+upgrade-demo   77m         Normal    Started                   pod/nginx-demo-787b5dd6c9-fvsbn        Container started
+upgrade-demo   77m         Normal    Created                   pod/nginx-demo-787b5dd6c9-fvsbn        Container created
+upgrade-demo   77m         Normal    Pulled                    pod/nginx-demo-787b5dd6c9-fvsbn        Successfully pulled image "nginx:1.27" in 3.121s (3.121s including waiting). Image size: 72406859 bytes.
+upgrade-demo   77m         Normal    Created                   pod/nginx-demo-787b5dd6c9-rf2bl        Container created
+upgrade-demo   77m         Normal    Started                   pod/nginx-demo-787b5dd6c9-rf2bl        Container started
+upgrade-demo   76m         Normal    EnsuringLoadBalancer      service/nginx-service                  Ensuring load balancer
+upgrade-demo   76m         Normal    EnsuredLoadBalancer       service/nginx-service                  Ensured load balancer
+kube-system    30m         Normal    LeaderElection            lease/kube-controller-manager          ip-10-0-118-81.ec2.internal_043055b8-41d6-4c29-9165-e78c51c3821e became leader
+default        30m         Normal    RegisteredNode            node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal event: Registered Node ip-192-168-48-229.ec2.internal in Controller
+default        30m         Normal    RegisteredNode            node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal event: Registered Node ip-192-168-17-4.ec2.internal in Controller
+kube-system    30m         Normal    LeaderElection            lease/kube-scheduler                   ip-10-0-118-81.ec2.internal_b16b36fa-35c1-4366-b217-882bd6be8ce6 became leader
+kube-system    30m         Normal    LeaderElection            lease/cloud-controller-manager         ip-10-0-47-74.ec2.internal_e7768e82-7556-47ff-8317-f915cdf365c6 became leader
+upgrade-demo   30m         Normal    EnsuringLoadBalancer      service/nginx-service                  Ensuring load balancer
+upgrade-demo   30m         Normal    EnsuredLoadBalancer       service/nginx-service                  Ensured load balancer
+kube-system    29m         Normal    LeaderElection            lease/eks-certificates-controller      ip-10-0-47-74.ec2.internal became leader
+kube-system    29m         Normal    LeaderElection            lease/eks-coredns-autoscaler           ip-10-0-118-81.ec2.internal_2ea46255-4879-4f30-9984-2bfe923959d9 became leader
+kube-system    29m         Normal    LeaderElection            lease/cp-vpc-resource-controller       ip-10-0-47-74.ec2.internal_c6a6ec86-62f9-4089-995b-d5187d162574 became leader
+kube-system    10m         Normal    LeaderElection            lease/kube-scheduler                   ip-10-0-117-200.ec2.internal_2eabfe10-e412-412b-977d-c087503bdeaf became leader
+kube-system    10m         Normal    LeaderElection            lease/kube-controller-manager          ip-10-0-117-200.ec2.internal_949edf00-88cf-4a72-b374-4ec2acc20062 became leader
+upgrade-demo   10m         Normal    EnsuringLoadBalancer      service/nginx-service                  Ensuring load balancer
+kube-system    10m         Normal    LeaderElection            lease/cloud-controller-manager         ip-10-0-34-56.ec2.internal_0cf97cc8-110c-40a2-9f69-684fbe774ed9 became leader
+default        10m         Normal    RegisteredNode            node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal event: Registered Node ip-192-168-17-4.ec2.internal in Controller
+default        10m         Normal    RegisteredNode            node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal event: Registered Node ip-192-168-48-229.ec2.internal in Controller
+upgrade-demo   10m         Normal    EnsuredLoadBalancer       service/nginx-service                  Ensured load balancer
+kube-system    9m55s       Normal    LeaderElection            lease/eks-coredns-autoscaler           ip-10-0-117-200.ec2.internal_c8225bf0-de13-4601-81f4-58bc4171e052 became leader
+kube-system    9m53s       Normal    LeaderElection            lease/eks-certificates-controller      ip-10-0-117-200.ec2.internal became leader
+kube-system    9m49s       Normal    LeaderElection            lease/cp-vpc-resource-controller       ip-10-0-34-56.ec2.internal_c0d9f5bb-35a6-43de-aaf0-eaa02ab368af became leader
+default        9m19s       Warning   InvalidDiskCapacity       node/ip-192-168-5-209.ec2.internal     invalid capacity 0 on image filesystem
+default        9m19s       Normal    NodeHasSufficientPID      node/ip-192-168-57-200.ec2.internal    Node ip-192-168-57-200.ec2.internal status is now: NodeHasSufficientPID
+default        9m19s       Normal    NodeHasSufficientPID      node/ip-192-168-5-209.ec2.internal     Node ip-192-168-5-209.ec2.internal status is now: NodeHasSufficientPID
+default        9m19s       Normal    NodeAllocatableEnforced   node/ip-192-168-5-209.ec2.internal     Updated Node Allocatable limit across pods
+default        9m19s       Normal    NodeAllocatableEnforced   node/ip-192-168-57-200.ec2.internal    Updated Node Allocatable limit across pods
+default        9m19s       Normal    NodeHasNoDiskPressure     node/ip-192-168-5-209.ec2.internal     Node ip-192-168-5-209.ec2.internal status is now: NodeHasNoDiskPressure
+default        9m19s       Normal    NodeHasNoDiskPressure     node/ip-192-168-57-200.ec2.internal    Node ip-192-168-57-200.ec2.internal status is now: NodeHasNoDiskPressure
+default        9m19s       Normal    NodeHasSufficientMemory   node/ip-192-168-57-200.ec2.internal    Node ip-192-168-57-200.ec2.internal status is now: NodeHasSufficientMemory
+default        9m19s       Normal    Starting                  node/ip-192-168-57-200.ec2.internal    Starting kubelet.
+default        9m19s       Normal    NodeHasSufficientMemory   node/ip-192-168-5-209.ec2.internal     Node ip-192-168-5-209.ec2.internal status is now: NodeHasSufficientMemory
+default        9m19s       Normal    Starting                  node/ip-192-168-5-209.ec2.internal     Starting kubelet.
+default        9m16s       Normal    Synced                    node/ip-192-168-5-209.ec2.internal     Node synced successfully
+kube-system    9m16s       Normal    SuccessfulCreate          daemonset/kube-proxy                   Created pod: kube-proxy-snwx5
+kube-system    9m16s       Normal    Scheduled                 pod/kube-proxy-snwx5                   Successfully assigned kube-system/kube-proxy-snwx5 to ip-192-168-5-209.ec2.internal
+kube-system    9m16s       Normal    SuccessfulCreate          daemonset/aws-node                     Created pod: aws-node-84l6v
+kube-system    9m16s       Normal    Scheduled                 pod/aws-node-84l6v                     Successfully assigned kube-system/aws-node-84l6v to ip-192-168-5-209.ec2.internal
+kube-system    9m15s       Normal    SuccessfulCreate          daemonset/aws-node                     Created pod: aws-node-422sf
+kube-system    9m15s       Normal    Scheduled                 pod/kube-proxy-hmg9l                   Successfully assigned kube-system/kube-proxy-hmg9l to ip-192-168-57-200.ec2.internal
+default        9m15s       Normal    Synced                    node/ip-192-168-57-200.ec2.internal    Node synced successfully
+kube-system    9m15s       Normal    SuccessfulCreate          daemonset/kube-proxy                   Created pod: kube-proxy-hmg9l
+kube-system    9m15s       Normal    Scheduled                 pod/aws-node-422sf                     Successfully assigned kube-system/aws-node-422sf to ip-192-168-57-200.ec2.internal
+kube-system    9m14s       Normal    Pulling                   pod/aws-node-84l6v                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.21.2-eksbuild.2"
+kube-system    9m14s       Normal    Pulling                   pod/kube-proxy-snwx5                   Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.35.3-eksbuild.11"
+kube-system    9m14s       Normal    Pulling                   pod/kube-proxy-hmg9l                   Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.35.3-eksbuild.11"
+kube-system    9m14s       Normal    Pulling                   pod/aws-node-422sf                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.21.2-eksbuild.2"
+default        9m13s       Normal    RegisteredNode            node/ip-192-168-5-209.ec2.internal     Node ip-192-168-5-209.ec2.internal event: Registered Node ip-192-168-5-209.ec2.internal in Controller
+default        9m13s       Normal    RegisteredNode            node/ip-192-168-57-200.ec2.internal    Node ip-192-168-57-200.ec2.internal event: Registered Node ip-192-168-57-200.ec2.internal in Controller
+kube-system    9m11s       Normal    Created                   pod/kube-proxy-snwx5                   Container created
+kube-system    9m11s       Normal    Started                   pod/kube-proxy-hmg9l                   Container started
+kube-system    9m11s       Normal    Created                   pod/kube-proxy-hmg9l                   Container created
+kube-system    9m11s       Normal    Pulled                    pod/kube-proxy-hmg9l                   Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.35.3-eksbuild.11" in 3.317s (3.317s including waiting). Image size: 31812938 bytes.
+kube-system    9m11s       Normal    Started                   pod/kube-proxy-snwx5                   Container started
+kube-system    9m11s       Normal    Pulled                    pod/kube-proxy-snwx5                   Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/kube-proxy:v1.35.3-eksbuild.11" in 3.418s (3.418s including waiting). Image size: 31812938 bytes.
+kube-system    9m10s       Normal    Created                   pod/aws-node-84l6v                     Container created
+kube-system    9m10s       Normal    Pulled                    pod/aws-node-422sf                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.21.2-eksbuild.2" in 3.787s (3.787s including waiting). Image size: 71910459 bytes.
+kube-system    9m10s       Normal    Pulled                    pod/aws-node-84l6v                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni-init:v1.21.2-eksbuild.2" in 4.038s (4.038s including waiting). Image size: 71910459 bytes.
+kube-system    9m10s       Normal    Started                   pod/aws-node-84l6v                     Container started
+kube-system    9m10s       Normal    Started                   pod/aws-node-422sf                     Container started
+kube-system    9m10s       Normal    Created                   pod/aws-node-422sf                     Container created
+kube-system    9m8s        Normal    Pulling                   pod/aws-node-84l6v                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.21.2-eksbuild.2"
+kube-system    9m8s        Normal    Pulling                   pod/aws-node-422sf                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.21.2-eksbuild.2"
+kube-system    9m6s        Normal    Pulled                    pod/aws-node-84l6v                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.21.2-eksbuild.2" in 2.245s (2.245s including waiting). Image size: 54065082 bytes.
+kube-system    9m6s        Normal    Pulled                    pod/aws-node-422sf                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon-k8s-cni:v1.21.2-eksbuild.2" in 2.252s (2.252s including waiting). Image size: 54065082 bytes.
+kube-system    9m6s        Normal    Pulling                   pod/aws-node-422sf                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3"
+kube-system    9m6s        Normal    Created                   pod/aws-node-84l6v                     Container created
+kube-system    9m6s        Normal    Started                   pod/aws-node-422sf                     Container started
+kube-system    9m6s        Normal    Created                   pod/aws-node-422sf                     Container created
+kube-system    9m5s        Normal    Started                   pod/aws-node-84l6v                     Container started
+kube-system    9m5s        Normal    Pulling                   pod/aws-node-84l6v                     Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3"
+kube-system    9m4s        Normal    Pulled                    pod/aws-node-422sf                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3" in 1.452s (1.452s including waiting). Image size: 36453590 bytes.
+kube-system    9m4s        Normal    Created                   pod/aws-node-84l6v                     Container created
+kube-system    9m4s        Normal    Started                   pod/aws-node-84l6v                     Container started
+kube-system    9m4s        Normal    Started                   pod/aws-node-422sf                     Container started
+kube-system    9m4s        Normal    Created                   pod/aws-node-422sf                     Container created
+kube-system    9m4s        Normal    Pulled                    pod/aws-node-84l6v                     Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/amazon/aws-network-policy-agent:v1.3.5-eksbuild.3" in 1.568s (1.568s including waiting). Image size: 36453590 bytes.
+default        9m3s        Normal    NodeReady                 node/ip-192-168-57-200.ec2.internal    Node ip-192-168-57-200.ec2.internal status is now: NodeReady
+default        9m3s        Normal    NodeReady                 node/ip-192-168-5-209.ec2.internal     Node ip-192-168-5-209.ec2.internal status is now: NodeReady
+default        8m39s       Normal    NodeNotSchedulable        node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal status is now: NodeNotSchedulable
+default        8m36s       Normal    NodeNotSchedulable        node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal status is now: NodeNotSchedulable
+upgrade-demo   7m41s       Normal    Killing                   pod/nginx-demo-787b5dd6c9-mq8fm        Stopping container nginx
+upgrade-demo   7m41s       Normal    Scheduled                 pod/nginx-demo-787b5dd6c9-tkh4t        Successfully assigned upgrade-demo/nginx-demo-787b5dd6c9-tkh4t to ip-192-168-5-209.ec2.internal
+kube-system    7m41s       Normal    Pulling                   pod/coredns-5959c9b9c4-bz2dz           Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10"
+kube-system    7m41s       Normal    SuccessfulCreate          replicaset/coredns-5959c9b9c4          Created pod: coredns-5959c9b9c4-bz2dz
+kube-system    7m41s       Normal    SuccessfulCreate          replicaset/metrics-server-7b78764d44   Created pod: metrics-server-7b78764d44-f9sqv
+upgrade-demo   7m41s       Normal    SuccessfulCreate          replicaset/nginx-demo-787b5dd6c9       Created pod: nginx-demo-787b5dd6c9-tkh4t
+kube-system    7m41s       Normal    Killing                   pod/metrics-server-7b78764d44-h2l6v    Stopping container metrics-server
+kube-system    7m41s       Normal    Scheduled                 pod/coredns-5959c9b9c4-bz2dz           Successfully assigned kube-system/coredns-5959c9b9c4-bz2dz to ip-192-168-57-200.ec2.internal
+kube-system    7m41s       Normal    Killing                   pod/coredns-5959c9b9c4-gs8xh           Stopping container coredns
+kube-system    7m41s       Normal    Scheduled                 pod/metrics-server-7b78764d44-f9sqv    Successfully assigned kube-system/metrics-server-7b78764d44-f9sqv to ip-192-168-5-209.ec2.internal
+upgrade-demo   7m40s       Normal    Pulling                   pod/nginx-demo-787b5dd6c9-tkh4t        Pulling image "nginx:1.27"
+kube-system    7m40s       Normal    Pulling                   pod/metrics-server-7b78764d44-f9sqv    Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.1-eksbuild.11"
+kube-system    7m39s       Warning   Unhealthy                 pod/coredns-5959c9b9c4-bz2dz           Readiness probe failed: Get "http://192.168.54.14:8181/ready": dial tcp 192.168.54.14:8181: connect: connection refused
+kube-system    7m39s       Normal    Started                   pod/coredns-5959c9b9c4-bz2dz           Container started
+kube-system    7m39s       Normal    Created                   pod/coredns-5959c9b9c4-bz2dz           Container created
+kube-system    7m39s       Normal    Pulled                    pod/coredns-5959c9b9c4-bz2dz           Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10" in 1.475s (1.475s including waiting). Image size: 26026481 bytes.
+kube-system    7m38s       Normal    Started                   pod/metrics-server-7b78764d44-f9sqv    Container started
+kube-system    7m38s       Normal    Created                   pod/metrics-server-7b78764d44-f9sqv    Container created
+kube-system    7m38s       Normal    Pulled                    pod/metrics-server-7b78764d44-f9sqv    Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.1-eksbuild.11" in 2.178s (2.178s including waiting). Image size: 22888993 bytes.
+upgrade-demo   7m36s       Normal    Started                   pod/nginx-demo-787b5dd6c9-tkh4t        Container started
+upgrade-demo   7m36s       Normal    Pulled                    pod/nginx-demo-787b5dd6c9-tkh4t        Successfully pulled image "nginx:1.27" in 4.537s (4.537s including waiting). Image size: 72406859 bytes.
+upgrade-demo   7m36s       Normal    Created                   pod/nginx-demo-787b5dd6c9-tkh4t        Container created
+kube-system    6m41s       Normal    Killing                   pod/coredns-5959c9b9c4-nsjbd           Stopping container coredns
+kube-system    6m41s       Normal    SuccessfulCreate          replicaset/coredns-5959c9b9c4          Created pod: coredns-5959c9b9c4-ql2fh
+kube-system    6m41s       Normal    Scheduled                 pod/coredns-5959c9b9c4-ql2fh           Successfully assigned kube-system/coredns-5959c9b9c4-ql2fh to ip-192-168-5-209.ec2.internal
+kube-system    6m40s       Normal    Pulling                   pod/coredns-5959c9b9c4-ql2fh           Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10"
+kube-system    6m39s       Normal    Started                   pod/coredns-5959c9b9c4-ql2fh           Container started
+kube-system    6m39s       Normal    Created                   pod/coredns-5959c9b9c4-ql2fh           Container created
+kube-system    6m39s       Normal    Pulled                    pod/coredns-5959c9b9c4-ql2fh           Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/coredns:v1.13.2-eksbuild.10" in 1.545s (1.545s including waiting). Image size: 26026481 bytes.
+kube-system    6m38s       Warning   Unhealthy                 pod/coredns-5959c9b9c4-ql2fh           Readiness probe failed: Get "http://192.168.21.45:8181/ready": dial tcp 192.168.21.45:8181: connect: connection refused
+kube-system    6m38s       Warning   Unhealthy                 pod/coredns-5959c9b9c4-ql2fh           Readiness probe failed: HTTP probe failed with statuscode: 503
+kube-system    5m36s       Normal    SuccessfulCreate          daemonset/kube-proxy                   Created pod: kube-proxy-d75nc
+kube-system    5m36s       Warning   NodeShutdown              pod/aws-node-djb8l                     Pod was rejected as the node is shutting down.
+kube-system    5m36s       Normal    SuccessfulCreate          daemonset/aws-node                     Created pod: aws-node-djb8l
+kube-system    5m36s       Normal    SuccessfulDelete          daemonset/kube-proxy                   Deleted pod: kube-proxy-nsfxh
+default        5m36s       Normal    Shutdown                  node/ip-192-168-17-4.ec2.internal      Shutdown manager detected shutdown event
+kube-system    5m36s       Normal    Scheduled                 pod/aws-node-djb8l                     Successfully assigned kube-system/aws-node-djb8l to ip-192-168-17-4.ec2.internal
+default        5m36s       Normal    NodeNotReady              node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal status is now: NodeNotReady
+kube-system    5m36s       Warning   NodeShutdown              pod/kube-proxy-d75nc                   Pod was rejected as the node is shutting down.
+kube-system    5m36s       Normal    Scheduled                 pod/kube-proxy-d75nc                   Successfully assigned kube-system/kube-proxy-d75nc to ip-192-168-17-4.ec2.internal
+kube-system    5m36s       Normal    Killing                   pod/kube-proxy-nsfxh                   Stopping container kube-proxy
+kube-system    5m36s       Warning   FailedDaemonPod           daemonset/kube-proxy                   Found failed daemon pod kube-system/kube-proxy-nsfxh on node ip-192-168-17-4.ec2.internal, will try to kill it
+kube-system    5m36s       Normal    Killing                   pod/aws-node-rdgp7                     Stopping container aws-node
+kube-system    5m36s       Normal    Killing                   pod/aws-node-rdgp7                     Stopping container aws-eks-nodeagent
+kube-system    5m36s       Warning   FailedDaemonPod           daemonset/aws-node                     Found failed daemon pod kube-system/aws-node-rdgp7 on node ip-192-168-17-4.ec2.internal, will try to kill it
+kube-system    5m36s       Normal    SuccessfulDelete          daemonset/aws-node                     Deleted pod: aws-node-rdgp7
+kube-system    5m35s       Normal    Scheduled                 pod/kube-proxy-2p2l5                   Successfully assigned kube-system/kube-proxy-2p2l5 to ip-192-168-17-4.ec2.internal
+kube-system    5m35s       Normal    Scheduled                 pod/aws-node-dwq8z                     Successfully assigned kube-system/aws-node-dwq8z to ip-192-168-17-4.ec2.internal
+kube-system    5m35s       Normal    SuccessfulDelete          daemonset/aws-node                     Deleted pod: aws-node-djb8l
+kube-system    5m35s       Warning   FailedDaemonPod           daemonset/kube-proxy                   Found failed daemon pod kube-system/kube-proxy-d75nc on node ip-192-168-17-4.ec2.internal, will try to kill it
+kube-system    5m35s       Normal    SuccessfulCreate          daemonset/aws-node                     Created pod: aws-node-dwq8z
+kube-system    5m35s       Warning   FailedDaemonPod           daemonset/aws-node                     Found failed daemon pod kube-system/aws-node-djb8l on node ip-192-168-17-4.ec2.internal, will try to kill it
+kube-system    5m35s       Normal    SuccessfulDelete          daemonset/kube-proxy                   Deleted pod: kube-proxy-d75nc
+kube-system    5m35s       Normal    SuccessfulCreate          daemonset/kube-proxy                   Created pod: kube-proxy-2p2l5
+default        4m56s       Normal    DeletingNode              node/ip-192-168-17-4.ec2.internal      Deleting node ip-192-168-17-4.ec2.internal because it does not exist in the cloud provider
+default        4m53s       Normal    RemovingNode              node/ip-192-168-17-4.ec2.internal      Node ip-192-168-17-4.ec2.internal event: Removing Node ip-192-168-17-4.ec2.internal from Controller
+upgrade-demo   4m39s       Normal    UpdatedLoadBalancer       service/nginx-service                  Updated load balancer with new hosts
+kube-system    3m39s       Normal    Pulling                   pod/metrics-server-7b78764d44-f9h9x    Pulling image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.1-eksbuild.11"
+kube-system    3m39s       Normal    SuccessfulCreate          replicaset/metrics-server-7b78764d44   Created pod: metrics-server-7b78764d44-f9h9x
+kube-system    3m39s       Normal    Killing                   pod/metrics-server-7b78764d44-zjmbh    Stopping container metrics-server
+upgrade-demo   3m39s       Normal    Killing                   pod/nginx-demo-787b5dd6c9-fvsbn        Stopping container nginx
+upgrade-demo   3m39s       Normal    Scheduled                 pod/nginx-demo-787b5dd6c9-7k9l5        Successfully assigned upgrade-demo/nginx-demo-787b5dd6c9-7k9l5 to ip-192-168-57-200.ec2.internal
+kube-system    3m39s       Normal    Scheduled                 pod/metrics-server-7b78764d44-f9h9x    Successfully assigned kube-system/metrics-server-7b78764d44-f9h9x to ip-192-168-57-200.ec2.internal
+upgrade-demo   3m39s       Normal    SuccessfulCreate          replicaset/nginx-demo-787b5dd6c9       Created pod: nginx-demo-787b5dd6c9-7k9l5
+upgrade-demo   3m38s       Normal    Pulling                   pod/nginx-demo-787b5dd6c9-7k9l5        Pulling image "nginx:1.27"
+kube-system    3m36s       Normal    Created                   pod/metrics-server-7b78764d44-f9h9x    Container created
+kube-system    3m36s       Normal    Pulled                    pod/metrics-server-7b78764d44-f9h9x    Successfully pulled image "602401143452.dkr.ecr.us-east-1.amazonaws.com/eks/metrics-server:v0.8.1-eksbuild.11" in 2.478s (2.478s including waiting). Image size: 22888993 bytes.
+kube-system    3m36s       Normal    Started                   pod/metrics-server-7b78764d44-f9h9x    Container started
+upgrade-demo   3m34s       Normal    Created                   pod/nginx-demo-787b5dd6c9-7k9l5        Container created
+upgrade-demo   3m34s       Normal    Started                   pod/nginx-demo-787b5dd6c9-7k9l5        Container started
+upgrade-demo   3m34s       Normal    Pulled                    pod/nginx-demo-787b5dd6c9-7k9l5        Successfully pulled image "nginx:1.27" in 4.313s (4.313s including waiting). Image size: 72406859 bytes.
+upgrade-demo   2m39s       Normal    SuccessfulCreate          replicaset/nginx-demo-787b5dd6c9       Created pod: nginx-demo-787b5dd6c9-fvq2x
+upgrade-demo   2m39s       Normal    Killing                   pod/nginx-demo-787b5dd6c9-rf2bl        Stopping container nginx
+upgrade-demo   2m39s       Normal    Scheduled                 pod/nginx-demo-787b5dd6c9-fvq2x        Successfully assigned upgrade-demo/nginx-demo-787b5dd6c9-fvq2x to ip-192-168-5-209.ec2.internal
+upgrade-demo   2m38s       Normal    Started                   pod/nginx-demo-787b5dd6c9-fvq2x        Container started
+upgrade-demo   2m38s       Normal    Created                   pod/nginx-demo-787b5dd6c9-fvq2x        Container created
+upgrade-demo   2m38s       Normal    Pulled                    pod/nginx-demo-787b5dd6c9-fvq2x        Container image "nginx:1.27" already present on machine and can be accessed by the pod
+kube-system    94s         Normal    Killing                   pod/aws-node-c979v                     Stopping container aws-eks-nodeagent
+kube-system    94s         Normal    Killing                   pod/aws-node-c979v                     Stopping container aws-node
+kube-system    94s         Warning   NodeShutdown              pod/aws-node-27wd2                     Pod was rejected as the node is shutting down.
+kube-system    94s         Normal    Killing                   pod/kube-proxy-4jfkp                   Stopping container kube-proxy
+kube-system    94s         Warning   FailedDaemonPod           daemonset/aws-node                     Found failed daemon pod kube-system/aws-node-c979v on node ip-192-168-48-229.ec2.internal, will try to kill it
+kube-system    94s         Normal    Scheduled                 pod/kube-proxy-rqzgd                   Successfully assigned kube-system/kube-proxy-rqzgd to ip-192-168-48-229.ec2.internal
+kube-system    94s         Warning   NodeShutdown              pod/kube-proxy-rqzgd                   Pod was rejected as the node is shutting down.
+kube-system    94s         Warning   FailedDaemonPod           daemonset/kube-proxy                   Found failed daemon pod kube-system/kube-proxy-4jfkp on node ip-192-168-48-229.ec2.internal, will try to kill it
+kube-system    94s         Normal    Scheduled                 pod/aws-node-27wd2                     Successfully assigned kube-system/aws-node-27wd2 to ip-192-168-48-229.ec2.internal
+kube-system    94s         Normal    SuccessfulDelete          daemonset/kube-proxy                   Deleted pod: kube-proxy-4jfkp
+default        94s         Normal    Shutdown                  node/ip-192-168-48-229.ec2.internal    Shutdown manager detected shutdown event
+kube-system    94s         Normal    SuccessfulDelete          daemonset/aws-node                     Deleted pod: aws-node-c979v
+kube-system    94s         Normal    SuccessfulCreate          daemonset/aws-node                     Created pod: aws-node-27wd2
+default        94s         Normal    NodeNotReady              node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal status is now: NodeNotReady
+kube-system    94s         Normal    SuccessfulCreate          daemonset/kube-proxy                   Created pod: kube-proxy-rqzgd
+kube-system    93s         Warning   FailedDaemonPod           daemonset/kube-proxy                   Found failed daemon pod kube-system/kube-proxy-rqzgd on node ip-192-168-48-229.ec2.internal, will try to kill it
+kube-system    93s         Normal    SuccessfulDelete          daemonset/kube-proxy                   Deleted pod: kube-proxy-rqzgd
+kube-system    93s         Normal    SuccessfulCreate          daemonset/kube-proxy                   Created pod: kube-proxy-6c579
+kube-system    93s         Normal    Scheduled                 pod/aws-node-4bhfl                     Successfully assigned kube-system/aws-node-4bhfl to ip-192-168-48-229.ec2.internal
+kube-system    93s         Warning   FailedDaemonPod           daemonset/aws-node                     Found failed daemon pod kube-system/aws-node-27wd2 on node ip-192-168-48-229.ec2.internal, will try to kill it
+kube-system    93s         Normal    SuccessfulDelete          daemonset/aws-node                     Deleted pod: aws-node-27wd2
+kube-system    93s         Normal    SuccessfulCreate          daemonset/aws-node                     Created pod: aws-node-4bhfl
+kube-system    93s         Normal    Scheduled                 pod/kube-proxy-6c579                   Successfully assigned kube-system/kube-proxy-6c579 to ip-192-168-48-229.ec2.internal
+default        36s         Normal    DeletingNode              node/ip-192-168-48-229.ec2.internal    Deleting node ip-192-168-48-229.ec2.internal because it does not exist in the cloud provider
+default        33s         Normal    RemovingNode              node/ip-192-168-48-229.ec2.internal    Node ip-192-168-48-229.ec2.internal event: Removing Node ip-192-168-48-229.ec2.internal from Controller
