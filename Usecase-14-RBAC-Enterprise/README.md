@@ -5,7 +5,6 @@
 ![Kubernetes RBAC](https://img.shields.io/badge/Kubernetes-RBAC-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
 ![Amazon EKS](https://img.shields.io/badge/Amazon-EKS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
 ![AWS IAM](https://img.shields.io/badge/AWS-IAM-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
-![License MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 A production-style implementation of Kubernetes Role-Based Access Control (RBAC) on Amazon EKS. This project designs and implements secure, least-privilege access for multiple engineering teams using Roles, ClusterRoles, RoleBindings, ClusterRoleBindings, ServiceAccounts, namespace isolation, and Kubernetes audit logging.
 
