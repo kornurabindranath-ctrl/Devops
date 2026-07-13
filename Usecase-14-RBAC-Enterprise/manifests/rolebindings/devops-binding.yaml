@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+
+metadata:
+  name: devops-binding
+  namespace: devops
+
+subjects:
+- kind: Group
+  name: devops-engineers
+  apiGroup: rbac.authorization.k8s.io
+
+roleRef:
+  kind: Role
+  name: devops-role
+  apiGroup: rbac.authorization.k8s.io

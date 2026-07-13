@@ -1,0 +1,23 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: rbac-enterprise
+  region: ap-south-1
+  version: "1.33"
+
+iam:
+  withOIDC: true
+
+managedNodeGroups:
+  - name: worker-nodes
+    instanceType: t3.medium
+    desiredCapacity: 2
+    minSize: 2
+    maxSize: 3
+    volumeSize: 20
+
+addons:
+  - name: vpc-cni
+  - name: kube-proxy
+  - name: coredns
