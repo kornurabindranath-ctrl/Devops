@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: nginx-default
+  namespace: resource-demo
+
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
