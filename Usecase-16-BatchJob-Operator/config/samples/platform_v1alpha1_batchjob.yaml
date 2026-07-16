@@ -1,0 +1,9 @@
+apiVersion: platform.rk.io/v1alpha1
+kind: BatchJob
+metadata:
+  labels:
+    app.kubernetes.io/name: usecase-16-batchjob-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: batchjob-sample
+spec:
+  # TODO(user): Add fields here

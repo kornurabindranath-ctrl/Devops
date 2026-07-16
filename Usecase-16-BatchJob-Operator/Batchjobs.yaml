@@ -1,0 +1,10 @@
+apiVersion: platform.rk.io/v1alpha1
+kind: BatchJob
+metadata:
+  name: hello-job
+spec:
+  image: busybox
+  command:
+    - sh
+    - -c
+    - echo "Hello from Operator" && sleep 10
