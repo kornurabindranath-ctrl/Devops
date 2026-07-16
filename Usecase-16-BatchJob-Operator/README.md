@@ -1,4 +1,69 @@
-# BatchJob operator
+# 🚀 Kubernetes BatchJob Operator
+
+![Go](https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
+![AWS EKS](https://img.shields.io/badge/AWS%20EKS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![Kubebuilder](https://img.shields.io/badge/Kubebuilder-blue?style=for-the-badge)
+
+---
+> A production-style Kubernetes Operator built from scratch using **Kubebuilder**, **controller-runtime**, and **Amazon EKS**.
+
+This project demonstrates how Kubernetes Operators work internally by implementing a custom controller that manages Kubernetes Jobs through a Custom Resource Definition (CRD). Instead of manually creating Kubernetes Jobs, users create a custom **BatchJob** resource, and the operator automatically creates and manages the corresponding Kubernetes Job.
+
+
+The BatchJob Operator continuously watches for `BatchJob` custom resources. Whenever one is created, the operator:
+
+- Watches the Custom Resource
+- Executes the reconciliation loop
+- Checks whether the Kubernetes Job already exists
+- Creates the Job if it does not exist
+- Sets Owner References
+- Updates the BatchJob status
+- Watches child Jobs for future reconciliation
+
+- ## 🏗 Architecture
+
+```mermaid
+flowchart TD
+    A[User: kubectl apply BatchJob.yaml] --> B[Kubernetes API Server]
+    B --> C[BatchJob Custom Resource]
+    C --> D[Controller Runtime Watch]
+    D --> E[Reconcile Loop]
+    E --> F[Read Desired State]
+    E --> G[Read Kubernetes Job]
+    F --> H{Job Exists?}
+    G --> H
+    H -->|Yes| I[Update Status]
+    H -->|No| J[Create Kubernetes Job]
+    J --> K[Set Owner Reference]
+    I --> L[Update BatchJob Status]
+    K --> L
+    L --> M[Watch Child Jobs]
+    M --> N[Reconcile on Job Events]
+```
+
+## 🔄 Reconciliation Flow
+
+```mermaid
+sequenceDiagram
+    participant BJ as BatchJob
+    participant C as Controller
+    participant K as Kubernetes Job
+
+    BJ->>C: Created / Updated
+    C->>BJ: Read spec
+    C->>K: Check if Job exists
+    alt Job exists
+        C->>K: Read Job status
+        C->>BJ: Update status
+    else Job does not exist
+        C->>K: Create Job
+        C->>K: Set Owner Reference
+        C->>BJ: Update status
+    end
+    C->>C: Wait for Job events
+    C->>C: Reconcile again
+```
 
 Before stating need to setup required tools
 
@@ -698,4 +763,34 @@ i can reconcilation is happening
 checking status
 
 <img width="2832" height="834" alt="image" src="https://github.com/user-attachments/assets/723c631c-b115-4532-a464-d3183afb3827" />
+
+
+## 🧠 Concepts Covered
+
+- Custom Resource Definitions (CRDs)
+- Kubebuilder project scaffolding
+- Custom controller development
+- Reconciliation loop, desired vs. actual state
+- Kubernetes client operations
+- Job creation & owner references
+- Garbage collection
+- Status subresource
+- Event-driven reconciliation
+- Watching child resources
+- Amazon EKS integration
+
+---
+
+## 📌 Next Enhancements
+
+- [ ] Synchronize Job status (Running / Succeeded / Failed)
+- [ ] Proper error handling (`apierrors.IsNotFound`)
+- [ ] Finalizers
+- [ ] Kubernetes Events
+- [ ] Deploy operator inside the cluster
+- [ ] Production-grade logging
+- [ ] GitHub Actions CI/CD
+- [ ] Helm packaging
+
+---
 
