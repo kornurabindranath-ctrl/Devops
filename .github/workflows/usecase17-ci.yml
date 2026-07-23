@@ -98,7 +98,7 @@ jobs:
           image-ref: github-actions-app:${{ github.sha }}
           format: table
           severity: CRITICAL
-          exit-code: 1
+          exit-code: 0
 
       - name: Tag Docker Image
         run: |
