@@ -93,7 +93,7 @@ jobs:
             ./Usecase-17-CICD-GitHub-Actions
 
       - name: Scan Docker Image
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: github-actions-app:${{ github.sha }}
           format: table
