@@ -72,40 +72,40 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
 
-  steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: ${{ vars.AWS_ROLE_ARN }}
-        aws-region: ${{ vars.AWS_REGION }}
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
 
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-    - name: Build Docker Image
-      run: |
-        docker build \
-          -t github-actions-app:${{ github.sha }} \
-          ./Usecase-17-CICD-GitHub-Actions
+      - name: Build Docker Image
+        run: |
+          docker build \
+            -t github-actions-app:${{ github.sha }} \
+            ./Usecase-17-CICD-GitHub-Actions
 
-    - name: Scan Docker Image
-      uses: aquasecurity/trivy-action@0.33.1
-      with:
-        image-ref: github-actions-app:${{ github.sha }}
-        format: table
-        severity: CRITICAL
-        exit-code: 1
+      - name: Scan Docker Image
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: github-actions-app:${{ github.sha }}
+          format: table
+          severity: CRITICAL
+          exit-code: 1
 
-    - name: Tag Docker Image
-      run: |
-        docker tag github-actions-app:${{ github.sha }} \
-        ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
+      - name: Tag Docker Image
+        run: |
+          docker tag github-actions-app:${{ github.sha }} \
+          ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
 
-    - name: Push Docker Image
-      run: |
-        docker push \
-        ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
+      - name: Push Docker Image
+        run: |
+          docker push \
+          ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
