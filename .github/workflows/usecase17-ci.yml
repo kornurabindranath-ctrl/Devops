@@ -5,15 +5,11 @@ on:
     branches:
       - main
       - develop
-    paths:
-      - "Usecase-17-CICD-GitHub-Actions/**"
 
   pull_request:
     branches:
       - main
       - develop
-    paths:
-      - "Usecase-17-CICD-GitHub-Actions/**"
 
 jobs:
   lint-and-test:
