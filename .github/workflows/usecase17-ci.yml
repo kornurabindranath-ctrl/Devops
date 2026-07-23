@@ -16,8 +16,12 @@ on:
       - "Usecase-17-CICD-GitHub-Actions/**"
 
 jobs:
-  test:
+  lint-and-test:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: Usecase-17-CICD-GitHub-Actions/app
 
     steps:
       - name: Checkout Repository
@@ -31,9 +35,12 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r Usecase-17-CICD-GitHub-Actions/app/requirements.txt
+          pip install -r requirements.txt
+
+      - name: Run Flake8
+        run: |
+          flake8 .
 
       - name: Run Tests
         run: |
-          cd Usecase-17-CICD-GitHub-Actions/app
           pytest
