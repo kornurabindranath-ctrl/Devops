@@ -104,8 +104,14 @@ jobs:
         run: |
           docker tag github-actions-app:${{ github.sha }} \
           ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
+          
+          docker tag github-actions-app:${{ github.sha }} \
+          ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest
 
       - name: Push Docker Image
         run: |
           docker push \
           ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:${{ github.sha }}
+
+          docker push \
+          ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY }}:latest
