@@ -1,0 +1,1386 @@
+# 🔐 Vault Secrets Management on Amazon EKS
+
+![AWS](https://img.shields.io/badge/AWS-EKS-orange?logo=amazonaws)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-1.30-blue?logo=kubernetes)
+![Vault](https://img.shields.io/badge/HashiCorp-Vault-black?logo=vault)
+![Helm](https://img.shields.io/badge/Helm-Package%20Manager-0F1689?logo=helm)
+![Status](https://img.shields.io/badge/Status-Completed-success)
+
+## 🚀 Features Implemented
+
+
+Deploy HashiCorp Vault HA on Amazon EKS
+Integrated Storage using Raft
+Persistent Storage with EBS CSI Driver
+Initialize and Unseal Vault
+Enable KV Version 2 Secrets Engine
+Store and Manage Secrets
+Configure Vault Policies
+Enable Kubernetes Authentication
+Configure Service Account Authentication
+Create Vault Roles
+Install Vault Agent Injector
+Automatic Secret Injection into Pods
+Debug Kubernetes Authentication using Vault Audit Logs
+
+---
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart TD
+    A[Amazon EKS] --> B[Kubernetes ServiceAccount]
+    B --> C[Kubernetes Auth Method - HashiCorp Vault]
+    C -->|Validate JWT| D[Vault Policy: myapp-policy]
+    D -->|Read Secret| E[KV v2 Secret Store: secret/myapp]
+    E --> F[Vault Agent Injector]
+    F --> G[/vault/secrets/config.txt/]
+    G --> H[Kubernetes Application]
+```
+
+---
+
+## 📂 Project Workflow
+
+```mermaid
+flowchart TD
+    A[Deploy Vault HA] --> B[Initialize & Unseal Vault]
+    B --> C[Enable KV Secrets Engine]
+    C --> D[Store Secret]
+    D --> E[Create Vault Policy]
+    E --> F[Enable Kubernetes Authentication]
+    F --> G[Create Vault Role]
+    G --> H[Deploy Vault Agent Injector]
+    H --> I[Deploy Application Pod]
+    I --> J[Authenticate using ServiceAccount]
+    J --> K[Retrieve Secret from Vault]
+    K --> L[Inject Secret into Application]
+```
+
+---
+# Create a EKS cluster 
+
+bash
+```
+eksctl create cluster \
+  --name vault-lab \
+  --region ap-south-1 \
+  --version 1.34 \
+  --nodegroup-name workers \
+  --node-type t3.medium \
+  --nodes 2 \
+  --managed
+```
+
+<img width="2844" height="1316" alt="image" src="https://github.com/user-attachments/assets/38dbeab8-1b3f-4048-b4ae-c0cf9637e4a1" />
+
+verify the cluster 
+
+bash
+```
+kubectl get nodes
+```
+
+
+# Installing Vault on EKS
+
+bash
+```
+                   EKS Cluster
+
+        +-----------------------------+
+        |                             |
+        |  vault-0                    |
+        |  vault-1                    |
+        |  vault-2                    |
+        |                             |
+        +-------------+---------------+
+                      |
+               Integrated Raft Storage
+```
+
+Vault uses Integrated Raft Storage to replicate its data.
+
+vault-0 stores secrets.
+vault-1 stores a copy.
+vault-2 stores another copy.
+
+If one pod crashes:
+
+The other two continue serving requests.
+No secrets are lost.
+This is called High Availability (HA).
+
+
+| Backend         | Use Case                        |
+| --------------- | ------------------------------- |
+| In-memory       | Development only                |
+| Consul          | Older production deployments    |
+| Integrated Raft | Modern production (recommended) |
+| DynamoDB        | Enterprise scenarios            |
+| PostgreSQL      | Supported but uncommon          |
+
+
+create  a namespace 
+
+bash
+```
+kubectl create namespace vault
+```
+
+Add the helm repository
+
+bash
+```
+helm repo add hashicorp https://helm.releases.hashicorp.com
+
+helm repo update
+```
+
+Verify the Chart
+
+bash
+```
+helm search repo hashicorp/vault
+```
+
+Write the Initial helm/values.yaml
+
+bash
+```
+global:
+  enabled: true
+
+server:
+  enabled: true
+
+  replicas: 3
+
+  ha:
+    enabled: true
+
+    raft:
+      enabled: true
+
+ui:
+  enabled: true
+```
+
+
+bash
+```
+helm install vault hashicorp/vault \
+  -n vault \
+  -f helm/values.yaml
+```
+
+<img width="2858" height="1104" alt="image" src="https://github.com/user-attachments/assets/9bba5fb9-4515-4103-9e45-7a898c218489" />
+
+we will extend the functionality of vault
+
+bash
+```
+global:
+  enabled: true
+
+server:
+  enabled: true
+
+  replicas: 3
+
+  image:
+    repository: hashicorp/vault  # specifies the Vault container image. Pinning a version avoids unexpected upgrades when the chart changes
+    tag: "1.20.3"
+
+  resources:  # Kubernetes container should define CPU and memory.
+    requests:
+      cpu: 250m
+      memory: 512Mi
+
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+  dataStorage:  # Vault cannot store secrets on the container filesystem. Pods are ephemeral.
+    enabled: true
+
+    size: 10Gi  # Each Vault replica gets its own persistent volume.
+
+    storageClass: gp2
+
+  ha:
+    enabled: true
+
+    raft:
+      enabled: true  # Vault uses its integrated Raft database.
+
+      config: |
+        ui = true
+
+        listener "tcp" {
+          address = "[::]:8200"
+          cluster_address = "[::]:8201"
+          tls_disable = 1
+        }
+
+        storage "raft" {
+          path = "/vault/data"
+        }
+
+        service_registration "kubernetes" {}  # essential for peer discovery in the Raft cluster.
+
+ui:
+  enabled: true
+
+  serviceType: ClusterIP  # UI is accessible only from within the cluster.
+```
+
+bash
+```
+helm uninstall vault -n vault
+
+kubectl delete pvc --all -n vault
+
+```
+
+Install  vault again
+
+bash
+```
+helm install vault hashicorp/vault \
+  --namespace vault \
+  --values helm/values.yaml
+```
+
+<img width="2902" height="1084" alt="image" src="https://github.com/user-attachments/assets/1ec30a68-0108-47ad-a6ab-9425be600b51" />
+
+<img width="2940" height="1272" alt="image" src="https://github.com/user-attachments/assets/2af01c8a-144d-4b4a-96cd-7ae84c59dea4" />
+
+<img width="2940" height="510" alt="image" src="https://github.com/user-attachments/assets/569eda78-0fe7-4e68-a26d-c7adeb41c3e4" />
+
+he Vault pods aren't even scheduled because their storage isn't available.
+
+storage class is:
+
+gp2   kubernetes.io/aws-ebs
+
+This uses the in-tree AWS EBS provisioner, which is no longer supported for provisioning on modern EKS versions. Recent EKS clusters use the Amazon EBS CSI Driver instead.
+
+
+# Install the Amazon EBS CSI Driver
+
+install add on the eks cluster
+
+bash
+```
+eksctl create addon \
+  --cluster vault-lab \
+  --name aws-ebs-csi-driver \
+  --region ap-south-1
+```
+
+<img width="2930" height="620" alt="image" src="https://github.com/user-attachments/assets/aaa45522-9cc9-4f20-9095-77a3e03df982" />
+
+<img width="2940" height="914" alt="image" src="https://github.com/user-attachments/assets/f9362aad-ceaf-46fc-954d-c00fc0f0c150" />
+
+checking controller logs
+
+bash
+```
+kubectl logs -n kube-system \
+deployment/ebs-csi-controller \
+-c ebs-plugin --tail=50
+```
+
+<img width="2940" height="1170" alt="image" src="https://github.com/user-attachments/assets/f14bb0b4-5726-49d9-9620-c0a16f9ebf3d" />
+
+to grant these permissions is IRSA (IAM Roles for Service Accounts) or EKS Pod Identity, both of which require an OIDC provider associated with the cluster.
+
+# Associate the OIDC provider
+
+bash
+```
+eksctl utils associate-iam-oidc-provider \
+  --cluster vault-lab \
+  --region ap-south-1 \
+  --approve
+```
+
+verfiy OIDC
+
+bash
+```
+aws eks describe-cluster \
+  --name vault-lab \
+  --region ap-south-1 \
+  --query "cluster.identity.oidc.issuer" \
+  --output text
+```
+
+<img width="2940" height="694" alt="image" src="https://github.com/user-attachments/assets/d8beb0b4-fcf0-4ec5-b181-3b3da9ebea0e" />
+
+# Delete and Recreate the addon with IAM permissions
+
+bash
+```
+eksctl delete addon \
+  --cluster vault-lab \
+  --region ap-south-1 \
+  --name aws-ebs-csi-driver
+```
+
+bash
+```
+eksctl create addon \
+  --cluster vault-lab \
+  --region ap-south-1 \
+  --name aws-ebs-csi-driver
+```
+
+<img width="2940" height="1086" alt="image" src="https://github.com/user-attachments/assets/6cf22138-f30a-488b-8849-d53a8029e0d6" />
+
+still facing one issue because my cluster has two nodes where as we have intialized 3 replicas of vault
+
+bash
+```
+eksctl scale nodegroup \
+  --cluster vault-lab \
+  --region ap-south-1 \
+  --name workers \
+  --nodes-min 2 \
+  --nodes-max 3 \
+  --nodes 3
+```
+
+<img width="2900" height="320" alt="image" src="https://github.com/user-attachments/assets/a742c110-e3d3-4253-abed-d497fde6c7c9" />
+
+
+Intialize one vault pod for raft cluster 
+bash
+```
+```
+operator init means:
+
+Initialize this Vault cluster for the very first time.
+
+Before initialization:
+
+Vault
+ ├── Running
+ ├── Storage exists
+ ├── No encryption key
+ └── Cannot store secrets
+
+After initialization:
+
+Vault
+ ├── Master Key created
+ ├── Raft initialized
+ ├── Root Token created
+ └── Unseal Keys created
+
+Without this step, Vault cannot be used.
+
+-key-shares=5
+
+Vault creates a master key to encrypt all stored secrets.
+
+Instead of storing that master key directly, Vault splits it using Shamir's Secret Sharing.
+
+bash
+```
+Master Key
+     │
+     ▼
++--------+
+| Split  |
++--------+
+   │
+   ├── Share 1
+   ├── Share 2
+   ├── Share 3
+   ├── Share 4
+   └── Share 5
+```
+
+Shamir Secret Shares
+
+Instead of storing the master key directly, Vault split it into five pieces.
+
+                Master Key
+                     │
+         Shamir Secret Sharing
+                     │
+      ┌──────┬──────┬──────┬──────┬──────┐
+      │      │      │      │      │
+    Key1   Key2   Key3   Key4   Key5
+
+You asked Vault to generate:
+
+5 Shares
+Threshold = 3
+
+Meaning:
+
+Any 3 keys can reconstruct the master key.
+1 or 2 keys are useless.
+All 5 are not required.
+
+Master Encryption Key
+
+Vault created a Master Encryption Key.
+
+This key encrypts everything stored in Vault:
+
+KV secrets
+Database credentials
+AWS credentials
+Certificates
+Tokens
+Policies
+
+Vault never prints this key.
+
+When you initialize vault-0, it becomes the first Raft node and bootstraps the cluster.
+
+Later:
+
+vault-1 joins the Raft cluster.
+vault-2 joins the Raft cluster.
+
+They don't need to be initialized again—they'll replicate the cluster state from the leader.
+
+<img width="2940" height="824" alt="image" src="https://github.com/user-attachments/assets/989090f6-4fcb-4a1b-993f-72ba1839c9d1" />
+
+unseal in progress we need unseal with 5 keys generated by vault. we need unseal with 3 because the threshold is 3
+
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault operator unseal '+mchwNoUa+VO9b82jBnLcFDgqvbsoF65fo4BEuJSpIUd'
+
+kubectl exec -it -n vault vault-0 -- \
+vault operator unseal 'm3wYHGrr9fLZdxamR+4IBJhGpSDu9Vj6RIcjnucgQn3y'
+
+kubectl exec -it -n vault vault-0 -- \
+vault operator unseal 'dR+ncHzWKum4OsU8kDEWwYAISQM0pK6VweWf0npRC1Bp'
+```
+after unseal
+<img width="2926" height="992" alt="image" src="https://github.com/user-attachments/assets/3acd0dc3-b2d2-4916-90aa-c1aa9998bfc8" />
+
+now need to do it for all 3 pods
+
+
+we have intialized vault-0 but not vault-1,2
+<img width="2900" height="508" alt="image" src="https://github.com/user-attachments/assets/4a5e5cbe-ce42-4d4d-8abd-dc7f97998f22" />
+
+then join the existing raft cluster 
+
+bash
+```
+kubectl exec -it -n vault vault-1 -- \
+vault operator raft join http://vault-0.vault-internal:8200
+
+kubectl exec -it -n vault vault-2 -- \
+vault operator raft join http://vault-0.vault-internal:8200
+```
+
+we can vault-0 as active HA mode wherea as Vault-1,Vault-2 as standby
+
+bash
+```
+                    Clients
+                        │
+                        ▼
+                +----------------+
+                |  Vault Service |
+                +----------------+
+                        │
+          ┌─────────────┴─────────────┐
+          │                           │
+          ▼                           ▼
+      +-----------+             +-----------+
+      | vault-1   |             | vault-2   |
+      | Standby   |             | Standby   |
+      +-----------+             +-----------+
+               \                 /
+                \               /
+                 \             /
+                  ▼           ▼
+                 +-------------+
+                 |  vault-0    |
+                 |   Leader     |
+                 +-------------+
+                        │
+                  Raft Storage
+```
+
+<img width="2852" height="458" alt="image" src="https://github.com/user-attachments/assets/4de48308-ea15-45a9-b0a3-c9534a13550a" />
+
+Now everything is ready , login to vault
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault login hvs.1FuHeLViNSejWFMGGaGRSDON
+```
+
+<img width="2930" height="808" alt="image" src="https://github.com/user-attachments/assets/233a7a07-8d61-4055-8a70-9217044df847" />
+
+verfiy the login
+
+<img width="2924" height="946" alt="image" src="https://github.com/user-attachments/assets/8ffada27-ee44-4106-b717-c7b49e4ade03" />
+
+# Enable the KV Secrets Engine
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault secrets enable -path=secret kv-v2
+```
+
+This creates a Key-Value (KV v2) secrets engine mounted at:
+
+secret/
+
+Applications will later read secrets from this path.
+
+<img width="2886" height="212" alt="image" src="https://github.com/user-attachments/assets/8216f0e9-1c98-401d-81b9-44db721630c2" />
+
+
+verfiy the secrets
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault secrets list
+```
+
+<img width="2918" height="482" alt="image" src="https://github.com/user-attachments/assets/c0c36740-7caa-490d-88e7-22272a9fec67" />
+
+
+Vault is just an empty secure storage system.
+
+The KV secrets engine is where you'll store secrets such as:
+
+Database usernames and passwords
+API keys
+AWS access keys
+TLS certificates
+Application configuration
+
+This is the most commonly used secrets engine and the foundation for the rest of the lab.
+
+# Store Your First Secret
+
+
+write one secret
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault kv put secret/myapp \
+username=admin \
+password=SuperSecret123
+```
+
+read the secret
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault kv get secret/myapp
+```
+
+<img width="2932" height="1640" alt="image" src="https://github.com/user-attachments/assets/6d6b3dee-3286-4c2a-bae3-2468acd6da69" />
+
+
+update the secreat and read again
+
+<img width="2936" height="1626" alt="image" src="https://github.com/user-attachments/assets/42cc21a9-c6a7-4437-9039-aef4fcf9f1eb" />
+you can see version 2
+
+
+# What is a Vault Policy?
+
+A policy is a set of permissions that defines who can access what in Vault.
+
+Think of it like Kubernetes RBAC:
+
+Kubernetes	Vault
+Role	Policy
+RoleBinding	Token/User mapped to Policy
+Verbs (get, list, create)	
+
+bash
+```
+Application A
+        │
+        ▼
+     Vault Token
+        │
+        ▼
+     app-policy
+        │
+        ▼
+secret/data/myapp
+```
+
+The application can only read its own secret, nothing else.
+
+## Create Policy
+
+bash
+```
+path "secret/data/myapp" {
+  capabilities = ["read"]
+}
+```
+
+Copy the Policy into the Vault Pod
+
+bash
+```
+kubectl cp myapp-policy.hcl vault/vault-0:/tmp/myapp-policy.hcl
+
+kubectl exec -it -n vault vault-0 -- ls -l /tmp/myapp-policy.hcl  ## verify
+```
+
+
+create a policy
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault policy write myapp-policy /tmp/myapp-policy.hcl
+```
+
+
+<img width="2936" height="218" alt="image" src="https://github.com/user-attachments/assets/00143c3f-bf0b-4efd-9052-e47ecd20897f" />
+
+Verify the Policy
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault policy list
+```
+
+
+<img width="2926" height="322" alt="image" src="https://github.com/user-attachments/assets/2415443f-e92c-49fa-8c1a-c7bec1f1728c" />
+
+read the policy
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault policy read myapp-policy
+```
+
+## Create an Application Token
+
+until now we are using root token , Now create a new token that has only the myapp-policy attached:
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault token create -policy=myapp-policy
+```
+
+<img width="2924" height="558" alt="image" src="https://github.com/user-attachments/assets/b8db2925-c688-4dc6-b53b-1b9c5520c96b" />
+
+## Test as the Application
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+env VAULT_TOKEN=hvs.CAESICTdGJPO7dsan3iZ_6pvK4btEKECYPZX-c95FbZKMl7LGh4KHGh2cy5HSkdwWDVLTU54Q284d0hDNnlJNGhhTDE \
+vault kv get secret/myapp
+```
+## Prove Least Privilege
+
+now try to modify
+
+bash
+```
+ kubectl exec -it -n vault vault-0 -- \
+env VAULT_TOKEN=hvs.CAESICTdGJPO7dsan3iZ_6pvK4btEKECYPZX-c95FbZKMl7LGh4KHGh2cy5HSkdwWDVLTU54Q284d0hDNnlJNGhhTDE \
+vault kv put secret/test value=123
+```
+
+<img width="2934" height="1594" alt="image" src="https://github.com/user-attachments/assets/9bba1fc8-b275-4c3a-8187-3ca255451661" />
+
+bash
+```
+                Vault
+
+        +-------------------+
+        |                   |
+        | secret/payment    |
+        | secret/orders     |
+        | secret/email      |
+        | secret/search     |
+        +-------------------+
+
+             ▲       ▲
+             │       │
+      Payment App   Orders App
+         Token         Token
+```
+The Payment service can only access secret/payment.
+The Orders service can only access secret/orders.
+Even if one service is compromised, it cannot read secrets belonging to other services.
+
+This is one of Vault's biggest security advantages.
+
+
+# Kubernetes Authentication
+
+
+So far, the application is using a manually created Vault token.
+
+In a real Kubernetes environment, this approach has drawbacks:
+
+You need to create and distribute tokens.
+Tokens must be rotated securely.
+Applications need a secure way to receive them.
+
+Instead, Vault integrates directly with Kubernetes.
+
+bash
+```
+        Pod Starts
+             │
+             ▼
+ Kubernetes Service Account
+             │
+             ▼
+      JWT Token (automatically mounted)
+             │
+             ▼
+         Vault Kubernetes Auth
+             │
+             ▼
+      Vault verifies the JWT
+             │
+             ▼
+     Vault issues a short-lived token
+             │
+             ▼
+   Application reads its secrets
+```
+
+Enable the Kubernetes Auth Method
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault auth enable kubernetes
+```
+
+verify auth methods
+
+```
+kubectl exec -it -n vault vault-0 -- \
+vault auth list
+```
+<img width="2922" height="418" alt="image" src="https://github.com/user-attachments/assets/23e587cb-be2d-49a9-be70-225eabe8547a" />
+
+
+Vault now supports multiple ways to authenticate users and applications.
+
+bash
+```
+Vault
+│
+├── Token Auth
+├── Kubernetes Auth
+├── AppRole Auth
+├── LDAP Auth
+├── GitHub Auth
+├── AWS IAM Auth
+└── OIDC Auth
+```
+
+How Kubernetes Authentication Works
+
+When a pod starts, Kubernetes automatically mounts a Service Account JWT inside the pod.
+
+bash
+```
+Pod
+ │
+ ├── Service Account
+ │
+ └── JWT Token
+        │
+        ▼
+      Vault
+        │
+        ▼
+Verify JWT with Kubernetes API Server
+        │
+        ▼
+Issue a short-lived Vault token
+```
+
+To verify that JWT, Vault needs three things:
+
+Kubernetes API Server address
+CA certificate (to trust the API server)
+Token Reviewer JWT (so Vault can ask Kubernetes to validate tokens)
+
+## Create a Service Account for Vault
+
+bash
+```
+kubectl create serviceaccount vault-auth -n vault
+
+kubectl get sa -n vault # verify
+```
+
+# Grant Token Review Permissions
+
+Vault needs permission to call the Kubernetes TokenReview API.
+bash
+```
+kubectl create clusterrolebinding vault-token-reviewer \
+  --clusterrole=system:auth-delegator \
+  --serviceaccount=vault:vault-auth
+
+
+  kubectl get clusterrolebinding vault-token-reviewer  # verfiy
+```
+
+## Get the Kubernetes API Server
+
+bash
+```
+kubectl config view --minify \
+-o jsonpath='{.clusters[0].cluster.server}'
+```
+<img width="2914" height="292" alt="image" src="https://github.com/user-attachments/assets/cbef536f-99bc-4b55-b41f-0db2705f3f60" />
+
+
+## Get the Service Account Token
+
+bash
+```
+kubectl create token vault-auth -n vault
+```
+<img width="2940" height="526" alt="image" src="https://github.com/user-attachments/assets/cba2da16-24a4-4151-8e9a-25e48cfc0645" />
+
+## Get the Kubernetes CA Certificate
+
+bash
+```
+kubectl config view --raw --minify \
+-o jsonpath='{.clusters[0].cluster.certificate-authority-data}' \
+| base64 --decode
+```
+<img width="2936" height="1076" alt="image" src="https://github.com/user-attachments/assets/61498093-8289-4f9c-a205-1a9dab690cb2" />
+
+bash
+```
+Application Pod
+      │
+      ▼
+Service Account JWT
+      │
+      ▼
+Vault
+      │
+      ▼
+TokenReview API
+      │
+      ▼
+Kubernetes API Server
+      │
+      ▼
+"Yes, this JWT belongs to this ServiceAccount."
+      │
+      ▼
+Vault issues a short-lived Vault token
+```
+# Configure Vault
+
+
+creating a ca.crt 
+
+bash
+```
+kubectl config view --raw --minify \
+-o jsonpath='{.clusters[0].cluster.certificate-authority-data}' \
+| base64 --decode > ca.crt
+```
+copy to vault pod
+
+bash
+```
+kubectl cp ca.crt vault/vault-0:/tmp/ca.crt
+```
+
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault write auth/kubernetes/config \
+token_reviewer_jwt="<TOKEN_REVIEWER_JWT>" \
+kubernetes_host="https://D3B5B4F3B19FB2D75FCC3DFD6CBD9D4C.gr7.ap-south-1.eks.amazonaws.com" \
+kubernetes_ca_cert=@/tmp/ca.crt
+```
+
+<img width="2926" height="660" alt="image" src="https://github.com/user-attachments/assets/e0b0abda-9560-4aeb-9b69-04ac8ae2f80b" />
+
+# Create a Vault Role
+
+A Vault Role maps a Kubernetes ServiceAccount to one or more Vault policies.
+
+bash
+```
+Kubernetes ServiceAccount
+            │
+            ▼
+      Vault Kubernetes Role
+            │
+            ▼
+       Vault Policy
+            │
+            ▼
+     Allowed Secrets
+```
+
+# Create an Application ServiceAccount
+
+create a dedicated ServiceAccount for your application.
+
+bash
+```
+kubectl create serviceaccount myapp -n default
+
+kubectl get sa -n default
+```
+
+<img width="2934" height="420" alt="image" src="https://github.com/user-attachments/assets/b797fedc-d3b8-43a3-944b-23cb29b34fab" />
+
+## Create the Vault Role
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- vault write auth/kubernetes/role/myapp-role \
+  bound_service_account_names=myapp \
+  bound_service_account_namespaces=default \
+  audience="https://kubernetes.default.svc" \
+  policies=myapp-policy \
+  ttl=1h
+
+
+  kubectl exec -it -n vault vault-0 -- \
+vault read auth/kubernetes/role/myapp-role  # verfiy
+```
+
+<img width="2934" height="1404" alt="image" src="https://github.com/user-attachments/assets/a9feb072-2888-4823-be2c-149cdb679169" />
+
+# Authenticate a Real Kubernetes Pod
+
+bash
+```
+Pod
+ │
+ ├── Read JWT
+ │
+ ▼
+Vault Login API
+ │
+ ▼
+Vault Token
+ │
+ ▼
+vault kv get secret/myapp
+```
+
+# Deploy a Test Pod
+
+bash
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vault-test
+  namespace: default
+spec:
+  serviceAccountName: myapp
+  containers:
+  - name: ubuntu
+    image: ubuntu:24.04
+    command:
+    - sleep
+    - "3600"
+```
+
+## Read the JWT from the Pod
+bash
+```
+kubectl exec -it vault-test -- \
+cat /var/run/secrets/kubernetes.io/serviceaccount/token
+```
+
+<img width="2930" height="652" alt="image" src="https://github.com/user-attachments/assets/5d4259ca-4ebd-418d-85bd-f809e958f8d5" />
+
+## Authenticate to Vault Using the JWT
+
+bash
+```
+JWT=$(kubectl exec vault-test -- \
+cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+
+echo ${JWT:0:40}...
+```
+
+## Send the JWT to Vault
+
+
+auth using kubernetes auth
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+vault write auth/kubernetes/login \
+role=myapp-role \
+jwt="$JWT"
+```
+
+<img width="2940" height="948" alt="image" src="https://github.com/user-attachments/assets/6bbec58b-9291-4ed9-8f1e-b2a25df13d8b" />
+
+bash
+```
+┌─────────────────────┐
+│ Kubernetes Pod      │
+│ ServiceAccount=myapp│
+└──────────┬──────────┘
+           │
+           │ JWT
+           ▼
+┌─────────────────────┐
+│ Vault               │
+│ auth/kubernetes     │
+└──────────┬──────────┘
+           │
+           │ TokenReview API
+           ▼
+┌─────────────────────┐
+│ Kubernetes API      │
+│ "JWT is valid" ✓    │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ Vault Token         │
+│ Policy=myapp-policy │
+└─────────────────────┘
+```
+This is the core production authentication flow used by applications running on Kubernetes.
+
+bash
+```
+                    Kubernetes Cluster
+                           │
+                           ▼
+               Pod (ServiceAccount: myapp)
+                           │
+                           ▼
+              ServiceAccount JWT (auto-mounted)
+                           │
+                           ▼
+                Vault Kubernetes Auth
+                           │
+                           ▼
+                Validate with EKS API Server
+                           │
+                           ▼
+                 Vault Role: myapp-role
+                           │
+                           ▼
+               Vault Policy: myapp-policy
+                           │
+                           ▼
+            Temporary Vault Token (1 hour)
+                           │
+                           ▼
+                  Read Authorized Secrets
+```
+
+## read the secret
+
+bash
+```
+kubectl exec -it -n vault vault-0 -- \
+env VAULT_TOKEN="$VAULT_TOKEN" \
+vault kv get secret/myapp
+```
+
+<img width="2936" height="1280" alt="image" src="https://github.com/user-attachments/assets/226eb9ab-0226-4fe9-bbd7-8f32150927ed" />
+
+
+# Vault Agent Injector
+
+bash
+```
+Instead of your application doing this:
+
+App
+ ├── Read JWT
+ ├── Login to Vault
+ ├── Get Vault Token
+ └── Read Secret
+
+We want this:
+
+App
+ │
+ ▼
+Read File
+/vault/secrets/config
+
+Everything else will be handled automatically by the Vault Agent.
+```
+
+bash
+```
+kubectl apply
+      │
+      ▼
+Mutating Admission Webhook
+      │
+      ▼
+Vault Agent Sidecar Injected
+      │
+      ▼
+Authenticate using ServiceAccount
+      │
+      ▼
+Fetch Secret
+      │
+      ▼
+Write Secret to Shared Volume
+      │
+      ▼
+Application Reads File
+```
+
+No Vault SDK.
+
+No Vault login.
+
+No token management.
+
+## Verify the Injector
+
+bash
+```
+kubectl get pods -n vault
+
+kubectl get deployment -n vault
+
+kubectl get mutatingwebhookconfigurations
+```
+
+The Mutating Admission Webhook is the component that automatically modifies new pods before they start.
+
+The application doesn't need to change—Kubernetes injects the Vault Agent automatically during pod creation.
+
+<img width="2938" height="802" alt="image" src="https://github.com/user-attachments/assets/6ac03cf3-49a1-4ccb-b938-dba2c4a49d7f" />
+
+# Create an Injection Pod
+
+bash
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: vault-inject-demo
+  namespace: default
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "myapp-role"
+    vault.hashicorp.com/agent-inject-secret-config.txt: "secret/data/myapp"
+spec:
+  serviceAccountName: myapp
+
+  containers:
+  - name: app
+    image: ubuntu:24.04
+    command:
+      - sleep
+      - "3600"
+```
+
+Enable injection
+vault.hashicorp.com/agent-inject: "true"
+
+This tells the webhook:
+
+"Inject a Vault Agent sidecar into this pod."
+
+vault.hashicorp.com/role: "myapp-role"
+
+The Vault Agent authenticates using this role.
+
+vault.hashicorp.com/agent-inject-secret-config.txt: "secret/data/myapp"
+
+This tells Vault:
+
+Fetch secret/data/myapp and write it into a file named:
+
+/vault/secrets/config.txt
+
+Notice that config.txt is just the filename you choose. You could call it db.env, credentials, or anything else.
+
+
+bash
+```
+Pod Created
+      │
+      ▼
+Admission Webhook
+      │
+      ▼
+Inject Vault Agent
+      │
+      ▼
+Authenticate to Vault
+      │
+      ▼
+Read secret/data/myapp
+      │
+      ▼
+Write
+/vault/secrets/config.txt
+```
+apply the pod
+bash
+```
+kubectl apply -f vault-inject.yaml
+
+kubectl get pod vault-inject-demo  # verify
+```
+
+
+<img width="2938" height="498" alt="image" src="https://github.com/user-attachments/assets/8c01ec4c-bf04-44ad-a6c8-f9a64d1cd493" />
+
+bash
+```
+kubectl logs vault-inject-demo -c vault-agent-init
+```
+<img width="2932" height="1020" alt="image" src="https://github.com/user-attachments/assets/222360ec-5ba6-40ea-b207-df69d19f8e69" />
+
+Vault is rejecting the Kubernetes authentication request.
+
+create a jwt token and attach vault again and then delete the pod and recreate
+
+
+<img width="2926" height="194" alt="image" src="https://github.com/user-attachments/assets/e2b3fc47-d4cb-42d0-833d-27f8671196d1" />
+
+## Check the injected secret
+
+bash
+```
+kubectl exec -it vault-inject-demo -c app -- \
+cat /vault/secrets/config.txt
+```
+
+
+<img width="2896" height="312" alt="image" src="https://github.com/user-attachments/assets/7f6ec2ee-4cb8-4073-8a7d-b67b113e2fd2" />
+
+## Verify the files
+
+bash
+```
+kubectl exec -it vault-inject-demo -c app -- \
+ls -l /vault/secrets
+```
+
+
+<img width="2940" height="474" alt="image" src="https://github.com/user-attachments/assets/03071e35-95eb-4045-bb36-dfacc0bea385" />
+
+
+
+bash
+```
+Kubernetes Pod
+        │
+        ▼
+Vault Agent Init Container
+        │
+        ▼
+Kubernetes Auth (ServiceAccount JWT)
+        │
+        ▼
+Vault
+        │
+        ▼
+Read secret: secret/myapp
+        │
+        ▼
+Write secret → /vault/secrets/config.txt
+        │
+        ▼
+Application reads the secret
+```
+
+bash
+```
+                    +------------------------+
+                    |      Amazon EKS        |
+                    +-----------+------------+
+                                |
+                                |
+                    ServiceAccount JWT
+                                |
+                                ▼
+                 +--------------------------+
+                 | Kubernetes Auth Method   |
+                 |        (Vault)           |
+                 +------------+-------------+
+                              |
+                       Validate JWT
+                              |
+                              ▼
+                 +--------------------------+
+                 |        Vault Policy      |
+                 |      myapp-policy        |
+                 +------------+-------------+
+                              |
+                       Read Secret
+                              |
+                              ▼
+                 +--------------------------+
+                 |     KV v2 Secret Engine  |
+                 |      secret/myapp        |
+                 +------------+-------------+
+                              |
+                     Vault Agent Injector
+                              |
+                              ▼
+                /vault/secrets/config.txt
+                              |
+                              ▼
+                    Application Container
+```
+
+## 🚧 Upcoming Enhancements
+
+The following production-grade features will be added in the next phase:
+
+- Vault Agent Templates
+- Automatic Secret Rotation
+- Dynamic Database Credentials
+- AWS Secrets Engine
+- Transit Secrets Engine
+- Auto-Unseal using AWS KMS
+- External Secrets Operator
+- TLS-enabled Vault
+- Monitoring with Prometheus & Grafana
+- Production Hardening
+
+This project demonstrates a secure and cloud-native approach to secret management on Kubernetes by eliminating hardcoded credentials and delivering secrets dynamically to workloads using HashiCorp Vault.
+
+It provides a strong foundation for implementing enterprise-grade secret management in production Kubernetes environments.
